@@ -5,7 +5,7 @@
 #include <iostream>
 #include <string>
 
-#pragma comment(lib, "version.lib") 
+#pragma comment(lib, "version.lib") // Used for checking Tibias version
 
 #include "detours.h"
 #pragma comment(lib, "detours.lib") // Include detours library
