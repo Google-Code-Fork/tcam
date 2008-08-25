@@ -1,0 +1,38 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 10.00
+# Visual Studio 2008
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "TCam - Recorder", "..\TCam - Recorder\TCam - Recorder\TCam - Recorder.vcproj", "{7AD182BE-EAB2-49A2-AA56-CD9D376CCEA4}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "TCam - Player", "..\TCam - Player\TCam - Player\TCam - Player.vcproj", "{CCA6C40C-9178-4EA3-892B-55402D5BFBB7}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Recorder", "..\Recorder\Recorder\Recorder.vcproj", "{D770BC7D-CF82-4276-AB76-300869328F46}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Player", "..\Player\Player\Player.vcproj", "{AD22780B-B8D9-440B-9747-5541AEBC2FCB}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Win32 = Debug|Win32
+		Release|Win32 = Release|Win32
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{7AD182BE-EAB2-49A2-AA56-CD9D376CCEA4}.Debug|Win32.ActiveCfg = Debug|Win32
+		{7AD182BE-EAB2-49A2-AA56-CD9D376CCEA4}.Debug|Win32.Build.0 = Debug|Win32
+		{7AD182BE-EAB2-49A2-AA56-CD9D376CCEA4}.Release|Win32.ActiveCfg = Release|Win32
+		{7AD182BE-EAB2-49A2-AA56-CD9D376CCEA4}.Release|Win32.Build.0 = Release|Win32
+		{CCA6C40C-9178-4EA3-892B-55402D5BFBB7}.Debug|Win32.ActiveCfg = Debug|Win32
+		{CCA6C40C-9178-4EA3-892B-55402D5BFBB7}.Debug|Win32.Build.0 = Debug|Win32
+		{CCA6C40C-9178-4EA3-892B-55402D5BFBB7}.Release|Win32.ActiveCfg = Release|Win32
+		{CCA6C40C-9178-4EA3-892B-55402D5BFBB7}.Release|Win32.Build.0 = Release|Win32
+		{D770BC7D-CF82-4276-AB76-300869328F46}.Debug|Win32.ActiveCfg = Debug|Win32
+		{D770BC7D-CF82-4276-AB76-300869328F46}.Debug|Win32.Build.0 = Debug|Win32
+		{D770BC7D-CF82-4276-AB76-300869328F46}.Release|Win32.ActiveCfg = Release|Win32
+		{D770BC7D-CF82-4276-AB76-300869328F46}.Release|Win32.Build.0 = Release|Win32
+		{AD22780B-B8D9-440B-9747-5541AEBC2FCB}.Debug|Win32.ActiveCfg = Debug|Win32
+		{AD22780B-B8D9-440B-9747-5541AEBC2FCB}.Debug|Win32.Build.0 = Debug|Win32
+		{AD22780B-B8D9-440B-9747-5541AEBC2FCB}.Release|Win32.ActiveCfg = Release|Win32
+		{AD22780B-B8D9-440B-9747-5541AEBC2FCB}.Release|Win32.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

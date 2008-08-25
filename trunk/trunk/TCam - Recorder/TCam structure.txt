@@ -1,0 +1,29 @@
+id 30 - XTEA update
+id 31 - Map Packet
+id 32 - Normal Packet
+
+[id] 1 - byte [length of packet] [packet...]
+
+
+1 byte 	- mode [0 = mappacket recorded, 1 = map packet NOT recorded]
+2 bytes 	- TibiaVersion [821,820,811,810...]
+4 bytes 	- movie length in milliseconds
+16 bytes	- XTEA key
+1 byte	- player name length
+X bytes	- player name
+1 byte 	- vocation
+1 byte	- level
+1 byte - magic level
+1 byte	- fist
+1 byte	- club
+1 byte	- sword
+1 byte	- axe
+1 byte	- distance
+1 byte	- shielding
+2 bytes	- monsters seen
+2 bytes	- monsters killed
+2 bytes	- players seen
+2 bytes	- players killed
+
+X bytes 	- packet [first 2 bytes is the length of the packet]
+4 bytes 	- delay in milliseconds
