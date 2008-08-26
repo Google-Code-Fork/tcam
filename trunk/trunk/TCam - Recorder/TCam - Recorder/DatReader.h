@@ -1,14 +1,7 @@
 #ifndef DATREADER_H
 #define DATREADER_H
 
-#include <iostream>
-#include <list>
-#include <string>
-#include <stdio.h>
-#include <windows.h>
 #include "Globals.h"
-
-using namespace std;
 
 class CDatReader;
 

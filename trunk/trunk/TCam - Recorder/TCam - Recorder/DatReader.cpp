@@ -1,6 +1,9 @@
 #include "DatReader.h"
 #include <string>
 
+/*************************************************************************************************
+Constructor
+*************************************************************************************************/
 CDatReader::CDatReader(string fileName)
 {
 
@@ -172,11 +175,19 @@ CDatReader::CDatReader(string fileName)
 	}
 }
 
-
+/*************************************************************************************************
+Destructor
+*************************************************************************************************/
 CDatReader::~CDatReader()
 {
 } 
 
+/*************************************************************************************************
+Function name: Advance
+Purpose: Advances the offset count
+Comments:
+Return: Void
+*************************************************************************************************/
 void CDatReader::Advance(int numBytes)
 {
 	if(byteOffset + numBytes > fileSize)
@@ -187,6 +198,12 @@ void CDatReader::Advance(int numBytes)
 	byteOffset += numBytes; // Increment bufferOffset
 }
 
+/*************************************************************************************************
+Function name: GetByte
+Purpose: Reads a byte from the buffer
+Comments:
+Return: Void
+*************************************************************************************************/
 void CDatReader::GetByte(int &myByte)
 {
 	//Error check!!!
@@ -194,6 +211,12 @@ void CDatReader::GetByte(int &myByte)
 	byteOffset++;
 }
 
+/*************************************************************************************************
+Function name: GetShort
+Purpose: Reads a short from the buffer
+Comments:
+Return: Void
+*************************************************************************************************/
 void CDatReader::GetShort(int &myByte)
 {
 	//Error check!!!
@@ -201,6 +224,12 @@ void CDatReader::GetShort(int &myByte)
 	byteOffset+=2;
 }
 
+/*************************************************************************************************
+Function name: GetObject
+Purpose: Gets an Objects flag
+Comments:
+Return: True if flag is there, false otherwise
+*************************************************************************************************/
 bool CDatReader::GetObject(int objectId, int flag)
 {
 	list<Object>::iterator i = objectList.begin(); // Beginning of list

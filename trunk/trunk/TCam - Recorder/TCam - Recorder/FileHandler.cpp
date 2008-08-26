@@ -47,7 +47,6 @@ void CFileHandler::Write(char *cBuffer, int nSize)
 	}
 	memcpy(&cData[nOffset],cBuffer,nSize);
 	nOffset += nSize;
-	return true;
 }
 
 /*************************************************************************************************
@@ -66,7 +65,6 @@ void CFileHandler::Write(int nBuffer, int nSize)
 	}
 	memcpy(&cData[nOffset],&nBuffer,nSize);
 	nOffset += nSize;
-	return true;
 }
 
 /*************************************************************************************************
