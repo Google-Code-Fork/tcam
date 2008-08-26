@@ -74,7 +74,7 @@ void CPacket::GenerateHeader(bool hEncrypted)
 
 bool CPacket::MapPacketBelow()
 {
-	Allocate(50000);
+	Allocate(100000);
 
 	Write(0x0A,1);
 	Write(*PLAYER_ID,4);
@@ -388,7 +388,7 @@ bool CPacket::MapPacketBelow()
 
 bool CPacket::MapPacketAbove()
 {
-	Allocate(50000);
+	Allocate(100000);
 
 	Write(0x0A,1);
 	Write(*PLAYER_ID,4);

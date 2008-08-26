@@ -1,56 +1,92 @@
 #include "FileHandler.h"
-#include "Tibia.h"
 
-CTibia FTibia;
-
+/************************************************************************************************* 
+Constructor
+*************************************************************************************************/
 CFileHandler::CFileHandler()
 {
 }
 
+/************************************************************************************************* 
+Destructor
+*************************************************************************************************/
 CFileHandler::~CFileHandler()
 {
 }
 
-void CFileHandler::Open(char *TfileName)
+/*************************************************************************************************
+Function name: Open
+Purpose: Saves filepath for later use of file output.
+Comments: Allocates roughtly 300 kb worth of memory
+Return: Void
+*************************************************************************************************/
+void CFileHandler::Open(char *cFileName)
 {
 	ZeroMemory(fileName,sizeof(fileName));
-	memcpy(fileName,TfileName,MAX_PATH);
+	memcpy(fileName,cFileName,MAX_PATH);
 	
-	offset = 0;
-	data = (char *)malloc(300000);
+	nOffset = 0;
+	cData = (unsigned char *)malloc(300000);
+
+	bStreamBusy = false;
 }
 
-bool CFileHandler::Write(char *buf, int nSize)
+/*************************************************************************************************
+Function name: Write
+Purpose: Used for writing char arrays to buffer
+Comments: Exports data once 200 kb limit is reached
+Return: Void
+*************************************************************************************************/
+void CFileHandler::Write(char *cBuffer, int nSize)
 {
-	if(offset > 204800)
+	while(!bStreamBusy) {} // Wait until file has been written
+
+	if(nOffset > 204800)
 	{
 		Export();
 	}
-	memcpy(&data[offset],buf,nSize);
-	offset += nSize;
+	memcpy(&cData[nOffset],cBuffer,nSize);
+	nOffset += nSize;
 	return true;
 }
 
-bool CFileHandler::Write(int buf, int nSize)
+/*************************************************************************************************
+Function name: Write
+Purpose: Used for writing integers to buffer
+Comments: Exports data once 200 kb limit is reached
+Return: Void
+*************************************************************************************************/
+void CFileHandler::Write(int nBuffer, int nSize)
 {
-	if(offset > 204800)
+	while(!bStreamBusy) {} // Wait until file has been written
+
+	if(nOffset > 204800)
 	{
 		Export();
 	}
-	memcpy(&data[offset],&buf,nSize);
-	offset += nSize;
+	memcpy(&cData[nOffset],&nBuffer,nSize);
+	nOffset += nSize;
 	return true;
 }
 
+/*************************************************************************************************
+Function name: Export
+Purpose: Writes to file specified by fileName variable
+Comments:
+Return: Void
+*************************************************************************************************/
 void CFileHandler::Export()
 {
-	myRecording.open(fileName, ios::out | ios::binary | ios::app);
-	myRecording.write(data,offset);
+	bStreamBusy = true;
+	myRecording.open(fileName, ios::out | ios::binary | ios::app); // Write to file
+	if(!myRecording.is_open())
+	{
+		// Fatal error - could not get stream to open!! 
+		// TODO: process with debug reporter
+	}
+	myRecording.write((const char *)cData,nOffset);
 	myRecording.close();
-	offset = 0;
-}
 
-void CFileHandler::GenerateHeader(int mode)
-{
-	
+	nOffset = 0; // Reset offset
+	bStreamBusy = false;
 }

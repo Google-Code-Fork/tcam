@@ -1,13 +1,26 @@
 #include "XTEA.h"
 
+/************************************************************************************************* 
+Constructor
+*************************************************************************************************/
 XTEA::XTEA()
 {
 }
 
+/************************************************************************************************* 
+Destructor
+*************************************************************************************************/
 XTEA::~XTEA()
 {
 }
 
+/*************************************************************************************************
+Function name: EncryptPacket
+Purpose: Encrypts a packet with XTEA routine
+Comments: The packet must have a header ( the first 2 bytes [unencrypted] specifying the 
+		  length of the encrypted packet.
+Return: True if packet header is a multiple of 8 which must be true for XTEA to work
+*************************************************************************************************/
 bool XTEA::EncryptPacket(unsigned char *cBuffer)
 {
 	unsigned int nSize = 0;
@@ -24,7 +37,13 @@ bool XTEA::EncryptPacket(unsigned char *cBuffer)
 	return true;
 }
 
-
+/*************************************************************************************************
+Function name: DecryptPacket
+Purpose: Decrypts a packet with XTEA routine
+Comments: The packet must have a header ( the first 2 bytes [unencrypted] specifying the 
+		  length of the encrypted packet.
+Return: True if packet header is a multiple of 8 which must be true for XTEA to work
+*************************************************************************************************/
 bool XTEA::DecryptPacket(unsigned char *cBuffer)
 {
 	unsigned int nSize = 0;
@@ -41,10 +60,12 @@ bool XTEA::DecryptPacket(unsigned char *cBuffer)
 	return true;
 }
 
-/*
-The following code was taken from Wikipedia.
-Full credits to David Wheeler and Roger Needham.
-*/
+/*************************************************************************************************
+Function name: encipher
+Purpose: Encryption function
+Comments: The following code was taken from Wikipedia. Full credits to David Wheeler and Roger Needham.
+Return: Void
+*************************************************************************************************/
 void XTEA::encipher(unsigned int num_rounds, unsigned long* v, unsigned long* k) 
 {
 	unsigned long v0=v[0], v1=v[1], i;
@@ -57,6 +78,12 @@ void XTEA::encipher(unsigned int num_rounds, unsigned long* v, unsigned long* k)
 	v[0]=v0; v[1]=v1;
 }
 
+/*************************************************************************************************
+Function name: decipher
+Purpose: Decrpytion function
+Comments: The following code was taken from Wikipedia. Full credits to David Wheeler and Roger Needham.
+Return: Void
+*************************************************************************************************/
 void XTEA::decipher(unsigned int num_rounds, unsigned long* v, unsigned long* k) 
 {
 	unsigned long v0=v[0], v1=v[1], i;
