@@ -6,6 +6,8 @@
 #include <fstream>
 #include <iostream>
 #include <time.h>
+#include <list>
+#include <stdio.h>
 #include <commctrl.h>
 #include <process.h>
 
