@@ -9,19 +9,19 @@ class CFileHandler
 public:
 	CFileHandler();
 	~CFileHandler();
-	void Open(char *TfileName);
-	bool Write(char *buf, int nSize);
-	bool Write(int but, int nSize);
+	void Open(char *cFileName);
+	void Write(char *cBuffer, int nSize);
+	void Write(int nBuffer, int nSize); 
 	void Export();
 
-	void GenerateHeader(int mode);
-
-	long offset;
-	char *data;
-	bool headerWritten;
-	ofstream myRecording;
+	long nOffset; // Current offset in the data pointer
+	unsigned char *cData; // Stores the packets as they arrive
+	unsigned char *cBackBuffer; // Backbuffer used for file output
+	
+	ofstream myRecording; // File stream
 private:
-	char fileName[MAX_PATH];
+	char fileName[MAX_PATH]; // Output file path 
+	bool bStreamBusy;
 };
 
 #endif
