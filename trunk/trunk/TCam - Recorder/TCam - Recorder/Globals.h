@@ -13,17 +13,19 @@
 
 using namespace std;
 
+enum Protocol
+{
+	XTEA_ID = 0x30,
+	BLIST_ID = 0x31,
+	DELAY_ID = 0x32,
+	PACKET_ID = 0x40
+};
+
 struct SPosition
 {
 	unsigned int x;
 	unsigned int y;
 	unsigned int z;
-};
-
-struct SPacketBuffer
-{
-	char *buf;
-	unsigned int nSize;
 };
 
 struct STileObject { 

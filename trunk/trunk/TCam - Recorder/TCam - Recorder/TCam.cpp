@@ -1,22 +1,11 @@
-#define WM_TRAY ( WM_USER + 1 )
+#define WM_TRAY (WM_USER + 1)
 
 #include "TCam.h"
 
-#include "resource.h"
-#include "detours.h" 
-#pragma comment(lib, "detours.lib") // Include detours library
-
-typedef int (APIENTRY __stdcall* FUNC_SENDBEGIN)(SOCKET s,const char *buf,int len,int flags); //Send function prototype
-typedef int (APIENTRY __stdcall* FUNC_RECVBEGIN)(SOCKET s,const char *buf,int len,int flags); //Recv function prototype
-FUNC_RECVBEGIN RecvPacket; // Define pointer to real recv() function inside Tibia
-FUNC_SENDBEGIN SendPacket; // Define pointer to real send() function inside Tibia
-SOCKET TibiaSoc; // Tibia Socket used
-
-NOTIFYICONDATA trayIcon; // Tray icon
 CFileHandler FileHandler;
-CTibia Tibia;
 CPacket Packet;
-XTEA Xtea;
+CTibia Tibia;
+CMap Map;
 
 int __stdcall SendHook(SOCKET s, const char *buf, int len, int flags) //Our Send function
 {
@@ -37,34 +26,9 @@ int __stdcall RecvHook(SOCKET s, const char *buf, int len, int flags) //Our Recv
 	int RecvedBytes = RecvPacket(s,buf,len,flags);
 	TibiaSoc = s;
 
-	if(camRecording)
+	if(bRecording)
 	{
-		char packetId[10];
-		ZeroMemory(&packetId[0],sizeof(packetId));
-		memcpy(&packetId[0],&buf[0],10);
-		packetId[0] = 0x08;
-		packetId[1] = 0x00;
-
-		Xtea.DecryptPacket((unsigned char *)packetId);
-
-		if(packetId[4] == 0x0A)
-		{
-			FileHandler.Write(100,4);
-			FileHandler.Write(0x30,1);
-			char myBuf[16];
-			ZeroMemory(myBuf,sizeof(myBuf));
-			memcpy(&myBuf[0],(const void *)XTeaAddress,16);
-			FileHandler.Write(myBuf,16);
-		} else 
-		{
-			delay = clock() - start;
-			start = clock();
-			FileHandler.Write(delay,4);
-			TotalRecTime += delay;
-		}
-		FileHandler.Write(0x32,1);
-		FileHandler.Write(RecvedBytes,2);
-		FileHandler.Write((char *)buf,RecvedBytes);
+		Packet.PhrasePacket((unsigned char *)buf,RecvedBytes);
 	}
 
 	return RecvedBytes;
@@ -122,8 +86,7 @@ BOOL CALLBACK MessageHandler(HWND hwnd, UINT Message, WPARAM wParam, LPARAM lPar
 
 	case WM_INITDIALOG:
 		{
-
-			SetWindowText(TibiahWnd, "TCam 0.1");
+			Tibia.SetText("TCam 0.5");
 			trayIcon.cbSize = sizeof( NOTIFYICONDATA );
 			trayIcon.uCallbackMessage = WM_TRAY;
 			trayIcon.uFlags = NIF_MESSAGE | NIF_ICON | NIF_TIP;
@@ -163,13 +126,12 @@ BOOL CALLBACK MessageHandler(HWND hwnd, UINT Message, WPARAM wParam, LPARAM lPar
 
 		case IDC_RECORD:
 			{
-				if(camRecording)
+				if(bRecording)
 				{
-					SetWindowText(TibiahWnd, "TCam 0.4");
 					SetWindowText(GetDlgItem(MainDialog,IDC_RECORD),"Record");
 					fileNameSet = false;
 					genMapPacket = false;
-					camRecording = false;
+					bRecording = false;
 
 					FileHandler.Write(TotalRecTime,4);
 					FileHandler.Export();
@@ -179,49 +141,35 @@ BOOL CALLBACK MessageHandler(HWND hwnd, UINT Message, WPARAM wParam, LPARAM lPar
 					{
 						if(OpenFileDialog(fileName))
 						{
-							SetWindowText(TibiahWnd, "Awaiting Login...");
-							while(*PLAYER_CONNECTION != 8)
-								Sleep(1);
+							Tibia.SetText("Awaiting Login...");
 
-							Sleep(100);
+							while(*PLAYER_CONNECTION != 8) { Sleep(1); }
+
 							genMapPacket = true;
 							FileHandler.Open(fileName);
+							FileHandler.WritePacket((unsigned char *)XTeaAddress,16,XTEA_ID);
 
-							start = clock();
-
-							FileHandler.Write(0x30,1);
-							char myBuf[16];
-							ZeroMemory(myBuf,sizeof(myBuf));
-							memcpy(&myBuf[0],(const void *)XTeaAddress,16);
-							FileHandler.Write(myBuf,16);
-
-							Sleep(100);
-
-							if(Packet.BattleListGet(*PLAYER_ID,BATTLELIST_Z) <= 7)
+							if(Tibia.BattleListGet(*PLAYER_ID,BATTLELIST_Z) <= 7)
 							{
-								if(!Packet.MapPacketAbove())
+								if(!Map.MapPacketAbove())
 								{
 									break;
 								}
 							} else
 							{
-								if(!Packet.MapPacketBelow())
+								if(!Map.MapPacketBelow())
 								{
 									break;
 								}
 							}
 
-							Sleep(10);
+							Map.Battlelist();
 
-							Packet.Battlelist();
-
-							Sleep(10);
-
-							camRecording = true;
+							bRecording = true;
 							genMapPacket = false;
 
 							SetWindowText(GetDlgItem(MainDialog,IDC_RECORD),"Stop");
-							SetWindowText(TibiahWnd, "Recording");
+							Tibia.SetText("Recording");
 						}
 					}
 				}
@@ -261,8 +209,6 @@ BOOL APIENTRY DllMain(HANDLE hModule, DWORD ul_reason_for_call, LPVOID lpReserve
 
 			SendPacket = (FUNC_SENDBEGIN)DetourFunction((PBYTE)DetourFindFunction("ws2_32.dll", "send"), (PBYTE)SendHook); //Set hook on send()
 			RecvPacket = (FUNC_RECVBEGIN)DetourFunction((PBYTE)DetourFindFunction("ws2_32.dll", "recv"), (PBYTE)RecvHook); //Set hook on recv()
-
-			TibiahWnd = FindWindow("TibiaClient", "Tibia");
 
 			break;
 		}

@@ -10,15 +10,19 @@ public:
 	CFileHandler();
 	~CFileHandler();
 	void Open(char *cFileName);
-	void Write(char *cBuffer, int nSize);
+	void Write(unsigned char *cBuffer, int nSize);
 	void Write(int nBuffer, int nSize); 
+	void WriteDelay();
+	void WritePacket(unsigned char *cBuffer, unsigned int nSize, unsigned int nPacketID);
 	void Export();
+	
 
 	long nOffset; // Current offset in the data pointer
 	unsigned char *cData; // Stores the packets as they arrive
-	unsigned char *cBackBuffer; // Backbuffer used for file output
 	
 	ofstream myRecording; // File stream
+	clock_t startClock;
+	unsigned int delayTime;
 private:
 	char fileName[MAX_PATH]; // Output file path 
 	bool bStreamBusy;

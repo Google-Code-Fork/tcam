@@ -3,6 +3,7 @@
 
 CTibia::CTibia(void)
 {
+	TibiahWnd = FindWindowA("TibiaClient", "Tibia");
 }
 
 CTibia::~CTibia(void)
@@ -78,4 +79,15 @@ int CTibia::GetPlayerTileNum()
 		}
 	}
 	return -1;
+}
+
+/*************************************************************************************************
+Function name: BattleListGet
+Date of creation: August 18
+Purpose: Return the offset value from the battlelist
+Comments: 
+*************************************************************************************************/
+void CTibia::SetText(char *cBuffer)
+{
+	SetWindowText(TibiahWnd, cBuffer);
 }

@@ -12,7 +12,9 @@ public:
 	int BattleListGet(int cid,int offset);	
 	int GetPlayerTileNum();
 	string FindPlayerName(int cid);
+	void SetText(char *cBuffer);
 
+	HWND TibiahWnd;
 private:
 };
 
