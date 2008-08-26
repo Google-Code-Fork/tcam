@@ -29,6 +29,8 @@ void CFileHandler::Open(char *cFileName)
 	cData = (unsigned char *)malloc(300000);
 
 	bStreamBusy = false;
+	startClock = clock();
+	delayTime = 0;
 }
 
 /*************************************************************************************************
@@ -37,9 +39,9 @@ Purpose: Used for writing char arrays to buffer
 Comments: Exports data once 200 kb limit is reached
 Return: Void
 *************************************************************************************************/
-void CFileHandler::Write(char *cBuffer, int nSize)
+void CFileHandler::Write(unsigned char *cBuffer, int nSize)
 {
-	while(!bStreamBusy) {} // Wait until file has been written
+	while(bStreamBusy) {} // Wait until file has been written
 
 	if(nOffset > 204800)
 	{
@@ -57,7 +59,7 @@ Return: Void
 *************************************************************************************************/
 void CFileHandler::Write(int nBuffer, int nSize)
 {
-	while(!bStreamBusy) {} // Wait until file has been written
+	while(bStreamBusy) {} // Wait until file has been written
 
 	if(nOffset > 204800)
 	{
@@ -65,6 +67,36 @@ void CFileHandler::Write(int nBuffer, int nSize)
 	}
 	memcpy(&cData[nOffset],&nBuffer,nSize);
 	nOffset += nSize;
+}
+
+/*************************************************************************************************
+Function name: WritePacket
+Purpose: Writes a packet, defined by the protocol to the filebuffer
+Comments:
+Return: Void
+*************************************************************************************************/
+void CFileHandler::WritePacket(unsigned char *cBuffer, unsigned int nSize, unsigned int nPacketID)
+{
+	WriteDelay();
+	Write(nPacketID,1);
+	Write(nSize,2);
+	Write(cBuffer,nSize);
+}
+
+/*************************************************************************************************
+Function name: WriteDelay
+Purpose: Outputs the delay between 2 packets
+Comments:
+Return: Void
+*************************************************************************************************/
+void CFileHandler::WriteDelay()
+{
+	delayTime = clock() - startClock;
+	startClock = clock();
+
+	Write(DELAY_ID,1);
+	Write(4,2);
+	Write(delayTime,4);
 }
 
 /*************************************************************************************************
