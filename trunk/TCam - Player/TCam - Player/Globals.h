@@ -11,12 +11,19 @@ using namespace std;
 
 #pragma comment(lib, "wsock32.lib") // Include winsock
 
-struct CamPacket
+enum Protocol
 {
-	char id;
-	char buf[20000];
+	XTEA_ID = 0x30,
+	BLIST_ID = 0x31,
+	DELAY_ID = 0x32,
+	PACKET_ID = 0x40
+};
+
+struct SPacket
+{
+	Protocol nID;
+	unsigned char cBuffer[20000];
 	int nSize;
-	long delay;
 };
 
 struct SRectScreen
@@ -41,5 +48,6 @@ struct SPosition
 
 extern HWND MainDialog;
 extern HWND hWnd;
+extern class CNetworkClient NetworkClient; 
 
 #endif
