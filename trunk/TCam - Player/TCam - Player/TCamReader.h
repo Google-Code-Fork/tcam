@@ -23,6 +23,7 @@ public:
 	int CurrentPlayTime;
 	bool reset;
 	long byteOffset;
+	bool bFirstPSent;
 private:
 	string fileName;
 	ifstream myRecording;

@@ -32,7 +32,8 @@ void CTCamReader::Open(string fName)
 	Nop(0x42333C,2);
 
 	CurrentPlayTime = 0;
-	TotalPlayTime = 60004330;
+	TotalPlayTime = 20000;
+	bFirstPSent = 0;
 }
 
 void CTCamReader::SendNextPacket()
@@ -40,6 +41,7 @@ void CTCamReader::SendNextPacket()
 	SPacket NextPacket;
 	NextPacket.nID = 0;
 	NextPacket.nSize = 0;
+	ZeroMemory(&NextPacket.cBuffer[0],sizeof(NextPacket.cBuffer));
 
 	memcpy(&NextPacket.nID,&data[byteOffset],1); // Get ID
 	Advance(1);
@@ -83,7 +85,6 @@ void CTCamReader::SendNextPacket()
 					}
 				}
 			} 
-			Sleep(100);
 		}
 		break;
 	case DELAY_ID:
@@ -96,6 +97,11 @@ void CTCamReader::SendNextPacket()
 	case PACKET_ID:
 		{
 			NetworkClient.SendMessageClient(NextPacket.cBuffer,NextPacket.nSize);
+			if(!bFirstPSent)
+			{
+				bFirstPSent = true;
+				DelayTime(100);
+			}
 		}
 		break;
 	default:
