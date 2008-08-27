@@ -146,6 +146,8 @@ BOOL CALLBACK MessageHandler(HWND hwnd, UINT Message, WPARAM wParam, LPARAM lPar
 							while(*PLAYER_CONNECTION != 8) { Sleep(1); }
 
 							genMapPacket = true;
+
+							Sleep(100);
 							FileHandler.Open(fileName);
 							FileHandler.WritePacket((unsigned char *)XTeaAddress,16,XTEA_ID);
 

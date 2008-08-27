@@ -32,7 +32,7 @@ void CPacket::PhrasePacket(unsigned char *cBuffer, int nSize)
 		FileHandler.WritePacket((unsigned char *)XTeaAddress,16,XTEA_ID);
 	} 
 	
-	FileHandler.WritePacket(cBuffer,16,PACKET_ID);
+	FileHandler.WritePacket(cBuffer,nSize,PACKET_ID);
 	
 
 	free(cMyBuf);

@@ -29,7 +29,7 @@ bool CMap::Allocate(unsigned int memCount)
 
 	if(data != NULL)
 	{
-		ZeroMemory(data,sizeof(memCount));
+		ZeroMemory(data,memCount);
 		return true;
 	}
 
@@ -439,7 +439,7 @@ Return: True if succeeded
 *************************************************************************************************/
 bool CMap::MapPacketAbove()
 {
-	Allocate(100000);
+	Allocate(50000);
 
 	Write(0x0A,1);
 	Write(*PLAYER_ID,4);
