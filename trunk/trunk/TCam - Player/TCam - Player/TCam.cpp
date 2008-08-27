@@ -96,41 +96,8 @@ DWORD WINAPI MainThread(LPVOID lpParam)
 
 	while(1)
 	{
-		if(clock() > (initClock + (waitTime/speed))) // Delay tunil next packet
-		{
-			CamPacket myPacket = Cam.ReadNextPacket(); // Read next packet
-			if(myPacket.id == 0x30) // If XTEA update
-			{
-			} else if(myPacket.id == 0x33)
-			{
-			} else
-			{
-				Playing = true;
-				NetworkClient.SendMessageClient(myPacket.buf,myPacket.nSize); // Send packet to client
-
-				initClock = clock();
-				waitTime = (int)((double)myPacket.delay); // Delay
-				lastWait = waitTime;
-			}
-		}
-		if(!Cam.reset)
-		{
-			Sleep(1);
-		} else
-		{
-			while(Cam.reset)
-			{
-				CamPacket resetPacket = Cam.ReadNextPacket(); // Read next packet
-
-				if(resetPacket.id == 0x30) // If XTEA update
-				{
-				} else 
-				{
-					NetworkClient.SendMessageClient(resetPacket.buf,resetPacket.nSize); // Send packet to client
-				}
-			}
-			
-		}
+		Cam.SendNextPacket();
+		Sleep(1);
 	}
 
 	return 0;
@@ -228,7 +195,7 @@ LRESULT APIENTRY TibiaHwNd(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam) /
 				else if(wParam == VK_BACK)
 				{
 					speed = 1.0;
-					Cam.Reset(Cam.CurrentPlayTime - 30 * 1000);
+					//Cam.Reset(Cam.CurrentPlayTime - 30 * 1000);
 				}
 				else if(wParam == VK_DELETE)
 				{

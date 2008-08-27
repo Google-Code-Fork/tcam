@@ -22,112 +22,81 @@ void CTCamReader::Open(string fName)
 	if(data == NULL)
 	{
 		MessageBoxA(MainDialog,"Insufficient memory or FileName not selected!","Info",MB_OK);
-		MessageBoxA(MainDialog,fName.c_str(),"CamPath",MB_OK);
 	}
 	myRecording.read(data,fileSize);
 	myRecording.close();
-	
-	memcpy(&TotalPlayTime,&data[fileSize-4],4);
-	fileSize -= 4;
+
 	byteOffset = 0;
 
 	Nop(0x42330D,2);
 	Nop(0x42333C,2);
+
+	CurrentPlayTime = 0;
+	TotalPlayTime = 60004330;
 }
 
-CamPacket CTCamReader::ReadNextPacket()
+void CTCamReader::SendNextPacket()
 {
-	CamPacket ret;
-	int packetSize = 0;
-	int fragpacketsize = 0;
-	long time = 0;
+	SPacket NextPacket;
 
-	memcpy(&ret.id,&data[byteOffset],1);
+	memcpy(&NextPacket.nID,&data[byteOffset],1); // Get ID
 	Advance(1);
-	if(ret.id == 0x30)
-	{
-		Sleep(100);
-		memcpy((void *)XTeaAddress,&data[byteOffset],16); // Copy
-		Advance(16);
-		Sleep(100);
-	} else if(ret.id == 0x31)
-	{
-		memcpy(&packetSize,&data[byteOffset],2); // Get packet header (size)
-		memcpy(&ret.buf[0],&data[byteOffset],packetSize+2); // Get buffer
-		Advance(packetSize+2);
-		
-		ret.delay = 100;
-		ret.nSize = packetSize+2;
-		
-	} else if(ret.id == 0x33)
-	{ 
-		int cID = 0;
-		memcpy(&cID,&data[byteOffset],4);
-		bool inlist = false;
+	memcpy(&NextPacket.nSize,&data[byteOffset],1); // Get size
+	Advance(2);
+	memcpy(&NextPacket.cBuffer[0],&data[byteOffset],NextPacket.nSize); // Get buffer
+	Advance(NextPacket.nSize);
 
-		for(unsigned int i = BATTLELIST_BEGIN; i < BATTLELIST_END; i = i + BATTLELIST_STEP) {
-			int *id = (int *)(i);
-			if(*id == cID)
-			{
-				inlist = true;
-			}
-		}
-
-		if(!inlist)
+	switch(NextPacket.nID)
+	{
+	case XTEA_ID:
 		{
+			Sleep(100);
+			memcpy((void *)XTeaAddress,&NextPacket.cBuffer[0],NextPacket.nSize); // Copy
+			Sleep(100);
+		}
+	case BLIST_ID:
+		{
+			int cID = 0;
+			memcpy(&cID,&NextPacket.cBuffer[0],4);
+			bool inlist = false;
+
 			for(unsigned int i = BATTLELIST_BEGIN; i < BATTLELIST_END; i = i + BATTLELIST_STEP) {
 				int *id = (int *)(i);
-				if(*id == 0)
+				if(*id == cID)
 				{
-					memcpy((void *)i,&data[byteOffset],160);
-					Advance(160);
-					int nextPacketID = 0;
-					memcpy(&nextPacketID,&data[byteOffset+4],1);
-
-					if(nextPacketID == 0x32)
-					{
-						Advance(4);
-					}
-					break;
+					inlist = true;
 				}
 			}
-		} else 
-		{
-			Advance(160);
-			int nextPacketID = 0;
-			memcpy(&nextPacketID,&data[byteOffset+4],1);
-			if(nextPacketID == 0x32)
+
+			if(!inlist)
 			{
-				Advance(4);
-			}
+				for(unsigned int i = BATTLELIST_BEGIN; i < BATTLELIST_END; i = i + BATTLELIST_STEP) {
+					int *id = (int *)(i);
+					if(*id == 0)
+					{
+						memcpy((void *)i,&NextPacket.cBuffer[0],160);
+						break;
+					}
+				}
+			} 
+
 		}
-	} else
-	{
-		memcpy(&packetSize,&data[byteOffset],2); // Get packet header (size)
-		Advance(2);
-		memcpy(&ret.buf[0],&data[byteOffset],packetSize); // Get buffer
-		Advance(packetSize);
-
-		memcpy(&time,&data[byteOffset],4);
-		Advance(4);
-		ret.delay = time;
-		ret.nSize = packetSize;
-
-		CurrentPlayTime += time;
-	}
-	if(reset)
-	{
-		if(CurrentPlayTime > PlayUntil)
+	case DELAY_ID:
 		{
-			reset = false;
+			unsigned int nTime = 0;
+			memcpy(&nTime,&NextPacket.cBuffer[0],4);
+			DelayTime(nTime);
+		}
+	case PACKET_ID:
+		{
+			NetworkClient.SendMessageClient((char *)NextPacket.cBuffer,NextPacket.nSize);
 		}
 	}
-	return ret;
 }
 
 void CTCamReader::Advance(int numBytes)
 {
-	
+
 	if(byteOffset + numBytes > fileSize)
 	{
 		Sleep(3000);
@@ -150,4 +119,11 @@ void CTCamReader::Nop(DWORD dwAddress, int size)
 	VirtualProtectEx(GetCurrentProcess(), (LPVOID)(0x42330D), size, PAGE_READWRITE, &dwOldProtect);
 	memset((LPVOID)(dwAddress), 0x90, size);
 	VirtualProtectEx(GetCurrentProcess(), (LPVOID)(0x42330D), size, dwOldProtect, &dwNewProtect);
+}
+
+void CTCamReader::DelayTime(unsigned int nMseconds)
+{
+	clock_t endwait;
+	endwait = clock () + nMseconds;
+	while (clock() < endwait) { Sleep(1); }
 }
