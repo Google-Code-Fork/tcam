@@ -38,11 +38,14 @@ void CTCamReader::Open(string fName)
 void CTCamReader::SendNextPacket()
 {
 	SPacket NextPacket;
+	NextPacket.nID = 0;
+	NextPacket.nSize = 0;
 
 	memcpy(&NextPacket.nID,&data[byteOffset],1); // Get ID
 	Advance(1);
-	memcpy(&NextPacket.nSize,&data[byteOffset],1); // Get size
+	memcpy(&NextPacket.nSize,&data[byteOffset],2); // Get size
 	Advance(2);
+
 	memcpy(&NextPacket.cBuffer[0],&data[byteOffset],NextPacket.nSize); // Get buffer
 	Advance(NextPacket.nSize);
 
@@ -54,6 +57,7 @@ void CTCamReader::SendNextPacket()
 			memcpy((void *)XTeaAddress,&NextPacket.cBuffer[0],NextPacket.nSize); // Copy
 			Sleep(100);
 		}
+		break;
 	case BLIST_ID:
 		{
 			int cID = 0;
@@ -74,23 +78,31 @@ void CTCamReader::SendNextPacket()
 					int *id = (int *)(i);
 					if(*id == 0)
 					{
-						memcpy((void *)i,&NextPacket.cBuffer[0],160);
+						memcpy((void *)i,&NextPacket.cBuffer[0],NextPacket.nSize);
 						break;
 					}
 				}
 			} 
-
+			Sleep(100);
 		}
+		break;
 	case DELAY_ID:
 		{
 			unsigned int nTime = 0;
-			memcpy(&nTime,&NextPacket.cBuffer[0],4);
+			memcpy(&nTime,&NextPacket.cBuffer[0],NextPacket.nSize);
 			DelayTime(nTime);
 		}
+		break;
 	case PACKET_ID:
 		{
-			NetworkClient.SendMessageClient((char *)NextPacket.cBuffer,NextPacket.nSize);
+			NetworkClient.SendMessageClient(NextPacket.cBuffer,NextPacket.nSize);
 		}
+		break;
+	default:
+		{
+			MessageBoxA(0,"This should not happen!","Test",MB_OK);
+		}
+		break;
 	}
 }
 

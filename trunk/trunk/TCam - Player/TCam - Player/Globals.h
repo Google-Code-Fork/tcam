@@ -21,8 +21,8 @@ enum Protocol
 
 struct SPacket
 {
-	Protocol nID;
-	unsigned char cBuffer[20000];
+	int nID;
+	char cBuffer[20000];
 	int nSize;
 };
 
