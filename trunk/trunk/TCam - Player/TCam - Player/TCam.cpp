@@ -3,14 +3,12 @@
 
 CNetworkClient NetworkClientCharList; // Used to establish connection with Login Server
 CNetworkClient NetworkClient; // Used as Game Server emulator
-XTEA Xtea; // Encryption/decryption
 CRegistry Registry;
 CTCamReader Cam;
 CTibia Tibia;
 
 DWORD WINAPI MainThread(LPVOID lpParam)
 {
-
 	while(!(hWnd = FindWindow("TibiaClient", 0))) // Get window handle
 		Sleep(1); 
 	wndProc = (WNDPROC)SetWindowLongPtr(hWnd, GWLP_WNDPROC, (LONG)TibiaHwNd); // Set message pointer
@@ -30,7 +28,7 @@ DWORD WINAPI MainThread(LPVOID lpParam)
 	}
 
 	RECT WindowSize;
-	GetClientRect(hWnd,&WindowSize); // Get size of the window 
+	GetClientRect(hWnd,&WindowSize); // Get size of the window
 
 	int posX = 120; // Distance to enter game button from left of window
 	int posY = WindowSize.bottom - 220; // Distance from the bottom

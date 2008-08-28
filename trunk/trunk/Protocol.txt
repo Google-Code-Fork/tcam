@@ -1,14 +1,35 @@
 Protocol 1.0
 
-[Id's] - HEX
+[*Id's*] - HEX
 
 30 - XTea Packet
-31 - Battlelist update
+31 - Battlelist Packet
 32 - Delay Packet
+33 - Header Packet
 40 - Normal Packet
 
-[Strucutre]
+[*Packet Strucutre*]
 
 [1 byte ]  - Packet ID
 [2 bytes]  - Packet Size
 [x bytes]  - Packet buffer
+
+[*Header*]
+
+[2 bytes ] - Tibia Version [821,820,811,810...]
+[4 bytes ] - Movie length in milliseconds
+[1 byte  ] - Player name length
+[x bytes ] - Player name
+[1 byte  ] - Vocation
+[1 byte  ] - Level
+[1 byte  ] - Magic level
+[1 byte  ] - Fist
+[1 byte  ] - Club
+[1 byte  ] - Sword
+[1 byte  ] - Axe
+[1 byte  ] - Distance
+[1 byte  ] - Shielding
+[2 bytes ] - Monsters seen
+[2 bytes ] - Monsters killed
+[2 bytes ] - Players seen
+[2 bytes ] - Players killed

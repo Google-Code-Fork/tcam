@@ -4,7 +4,6 @@
 #include "Globals.h"
 #include "NetworkClient.h"
 #include "TCamReader.h"
-#include "XTEA.h"
 #include "Registry.h"
 #include "Tibia.h"
 
