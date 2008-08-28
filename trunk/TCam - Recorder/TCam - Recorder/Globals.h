@@ -18,8 +18,10 @@ enum Protocol
 	XTEA_ID = 0x30,
 	BLIST_ID = 0x31,
 	DELAY_ID = 0x32,
+	HEADER_ID = 0x33,
 	PACKET_ID = 0x40
 };
+
 
 struct SPosition
 {

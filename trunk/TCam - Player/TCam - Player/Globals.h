@@ -6,6 +6,9 @@
 #include <fstream>
 #include <iostream>
 #include <time.h>
+#include <stdio.h>
+#include <math.h>
+
 
 using namespace std;
 
@@ -16,6 +19,7 @@ enum Protocol
 	XTEA_ID = 0x30,
 	BLIST_ID = 0x31,
 	DELAY_ID = 0x32,
+	HEADER_ID = 0x33,
 	PACKET_ID = 0x40
 };
 

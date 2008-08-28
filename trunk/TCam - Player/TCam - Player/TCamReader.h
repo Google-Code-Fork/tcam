@@ -21,6 +21,8 @@ public:
 
 	int TotalPlayTime;
 	int CurrentPlayTime;
+	int LeftOverTime;
+
 	bool reset;
 	long byteOffset;
 	bool bFirstPSent;

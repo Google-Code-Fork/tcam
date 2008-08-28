@@ -16,14 +16,14 @@ public:
 	void WritePacket(unsigned char *cBuffer, unsigned int nSize, unsigned int nPacketID);
 	void Export();
 	
-
 	long nOffset; // Current offset in the data pointer
 	unsigned char *cData; // Stores the packets as they arrive
 	
-	ofstream myRecording; // File stream
 	clock_t startClock;
 	unsigned int delayTime;
+	unsigned int totalTime;
 private:
+	ofstream myRecording; // File stream
 	char fileName[MAX_PATH]; // Output file path 
 	bool bStreamBusy;
 };

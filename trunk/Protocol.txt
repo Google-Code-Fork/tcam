@@ -16,6 +16,8 @@ Protocol 1.0
 
 [*Header*]
 
+[1 byte ]  - Packet ID
+[2 bytes]  - Packet Size
 [2 bytes ] - Tibia Version [821,820,811,810...]
 [4 bytes ] - Movie length in milliseconds
 [1 byte  ] - Player name length
