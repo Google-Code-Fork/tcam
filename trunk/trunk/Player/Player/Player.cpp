@@ -1,4 +1,5 @@
 #include "Player.h"
+#include <sstream>
 
 CRegistry Registry;
 
@@ -52,7 +53,10 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR szCmdLine,
 		STARTUPINFO si = {sizeof(STARTUPINFO)};
 		PROCESS_INFORMATION pi = {0};
 
-		BOOL bSuccess = DetourCreateProcessWithDll( TibiaPath, " gamemaster", 0, 0, TRUE,
+		std::stringstream CmdArgsStream;
+		CmdArgsStream << " gamemaster " << "-camfile:" << camFilePath;
+
+		BOOL bSuccess = DetourCreateProcessWithDll( TibiaPath, (LPTSTR)CmdArgsStream.str().c_str(), 0, 0, TRUE,
 			CREATE_DEFAULT_ERROR_MODE | CREATE_NEW_CONSOLE, NULL,
 			TibiaDir, &si, &pi, PlayerDLL, 0 );
 
