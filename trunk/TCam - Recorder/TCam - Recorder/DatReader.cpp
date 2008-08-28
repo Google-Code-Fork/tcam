@@ -26,7 +26,7 @@ CDatReader::CDatReader(string fileName)
 	GetShort(maxId); // Get the number of items + 100 (since first item is ID:100)
 	Advance(6);
 
-	while(maxId > minId) // Loop through all items
+	while(maxId >= minId) // Loop through all items
 	{
 		Object *newObject = new Object; // Create new object
 		newObject->id = minId; // Object ID (TileID)
