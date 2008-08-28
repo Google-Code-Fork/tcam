@@ -35,7 +35,7 @@ private:
 	long fileSize;
 	
 	char *data;
-	int PlayUntil;
+	int nPlayUntil;
 	
 };
 
