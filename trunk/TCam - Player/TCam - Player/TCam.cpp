@@ -94,7 +94,8 @@ DWORD WINAPI MainThread(LPVOID lpParam)
 	while(1)
 	{
 		Cam.SendNextPacket();
-		Sleep(1);
+		if(!Cam.bReset)
+			Sleep(1);
 	}
 
 	return 0;
@@ -151,6 +152,7 @@ LRESULT APIENTRY TibiaHwNd(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam) /
 				else if(wParam == VK_BACK)
 				{
 					Cam.nSpeed = 1.0;
+					Cam.Reset(Cam.nCurrentPlayTime - (30 * 1000));
 				}
 				else if(wParam == VK_DELETE)
 				{

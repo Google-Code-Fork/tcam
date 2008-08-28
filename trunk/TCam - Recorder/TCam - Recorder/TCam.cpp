@@ -128,12 +128,12 @@ BOOL CALLBACK MessageHandler(HWND hwnd, UINT Message, WPARAM wParam, LPARAM lPar
 			{
 				if(bRecording)
 				{
+					bRecording = false;
+					FileHandler.Export();
 					SetWindowText(GetDlgItem(MainDialog,IDC_RECORD),"Record");
+					Tibia.SetText("TCam 1.0");
 					fileNameSet = false;
 					genMapPacket = false;
-					bRecording = false;
-
-					FileHandler.Export();
 				} else 
 				{
 					if(!fileNameSet)

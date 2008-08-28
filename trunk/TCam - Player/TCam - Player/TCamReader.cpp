@@ -3,7 +3,7 @@
 CTCamReader::CTCamReader()
 {
 	bReset = false;
-	PlayUntil = 0;
+	nPlayUntil = 0;
 }
 
 CTCamReader::~CTCamReader()
@@ -135,7 +135,14 @@ void CTCamReader::Reset(int time)
 {
 	byteOffset = 0;
 	bReset = true;
-	PlayUntil = time;
+
+	if(time <= 0)
+	{
+		time = 0;
+		bReset = false;
+	}
+
+	nPlayUntil = time;
 	nCurrentPlayTime = 0;
 }
 
@@ -149,13 +156,23 @@ void CTCamReader::Nop(DWORD dwAddress, int size)
 
 void CTCamReader::DelayTime(unsigned int nMseconds)
 {
-	clock_t start = clock();
+	if(!bReset)
+	{
 	unsigned int temp = 0;
 	
+	clock_t start = clock();
 	while (clock() < (start + (unsigned int)(nMseconds/nSpeed)))
 	{ 
 		nCurrentPlayTime += (int)(((clock() - start) - temp) * nSpeed);
 		temp = (clock() - start);
 		Sleep(1);
+	}
+
+	nCurrentPlayTime += (int)(((clock() - start) - temp) * nSpeed);
+	} else
+	{
+		nCurrentPlayTime += nMseconds;
+		if(nCurrentPlayTime > nPlayUntil)
+			bReset = false;
 	}
 }

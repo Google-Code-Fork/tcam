@@ -29,9 +29,9 @@ void CFileHandler::Open(char *cFileName)
 	cData = (unsigned char *)malloc(300000);
 
 	bStreamBusy = false;
-	startClock = clock();
 	delayTime = 0;
 	totalTime = 0;
+	startClock = clock();
 }
 
 /*************************************************************************************************
@@ -117,7 +117,8 @@ void CFileHandler::Export()
 		// TODO: process with debug reporter
 	}
 	myRecording.write((const char *)cData,nOffset);
-	
+	myRecording.close();
+
 	ifstream readStream;
 	readStream.open(fileName, ios::in | ios::binary | ios::ate);
 	readStream.seekg(0,ios_base::end);
@@ -131,7 +132,7 @@ void CFileHandler::Export()
 
 	// TODO: add monster kills and player kills
 
-	myRecording.close();
+	
 	myRecording.open(fileName, ios::out | ios::binary | ios::beg);
 	myRecording.write((const char *)cTemp,length);
 	myRecording.close();
