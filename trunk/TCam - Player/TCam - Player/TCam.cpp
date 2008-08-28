@@ -77,8 +77,11 @@ DWORD WINAPI MainThread(LPVOID lpParam)
 			break; // Established connection to Proxy
 	}
 
-	DWORD Len = 260; 
-	Registry.QueryStringValue(HKEY_LOCAL_MACHINE,"Software\\TibiaFreak\\TCam", "CamPlaying",camFullPath,Len); // Get cam full-path
+	if(strcmp(camFullPath, "") == 0)
+	{
+		DWORD Len = 260; 
+		Registry.QueryStringValue(HKEY_LOCAL_MACHINE,"Software\\TibiaFreak\\TCam", "CamPlaying",camFullPath,Len); // Get cam full-path
+	}
 
 	// Start reading file and playing cam
 	Cam.Open(camFullPath);
@@ -306,6 +309,10 @@ BOOL APIENTRY DllMain(HANDLE hModule, DWORD ul_reason_for_call, LPVOID lpReserve
 	{
 	case DLL_PROCESS_ATTACH: //On dll attach
 		{
+			string CmdArgs = GetCommandLineA(); //Get the commandline
+			int pos = CmdArgs.find("-camfile:"); //Try to look for the camfile path
+			if (pos != string::npos) //If found:
+				strcpy(camFullPath, CmdArgs.substr(pos + 9).c_str()); //pos points to beginning of -camfile: string, so it's +9 chars
 			hMainThread = CreateThread(NULL, 0, MainThread, 0, 0, 0); // Create Main Loop
 			hWindowUpdate = CreateThread(NULL, 0, WindowUpdate, 0, 0, 0); // Create Window update loop
 			hUserInteraction = CreateThread(NULL, 0, UserInteraction, 0, 0, 0); // Create message recording thread
