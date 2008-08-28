@@ -2,10 +2,11 @@
 #include "resource.h"
 
 CNetworkClient NetworkClientCharList; // Used to establish connection with Login Server
-CNetworkClient NetworkClient; // Used to Game Server emulator
+CNetworkClient NetworkClient; // Used as Game Server emulator
 XTEA Xtea; // Encryption/decryption
 CRegistry Registry;
 CTCamReader Cam;
+CTibia Tibia;
 
 DWORD WINAPI MainThread(LPVOID lpParam)
 {
@@ -24,7 +25,7 @@ DWORD WINAPI MainThread(LPVOID lpParam)
 
 	if(!NetworkClientCharList.proxyReady) // Check if everything is set up
 	{
-		MessageBoxA(MainDialog,"Failed to initialize proxy.","TCam Player",MB_OK);
+		MessageBoxA(MainDialog,"Failed to initialize proxy.","Error",MB_OK);
 		return 1;
 	}
 
@@ -50,18 +51,13 @@ DWORD WINAPI MainThread(LPVOID lpParam)
 			break; // connection established
 	}
 
-	unsigned char Packet[512]; // Create our own login packet
-	memset(Packet,0,512);
-	int BufferLen = CreateCharList(Packet,"Movie");
-
 	Sleep(100);
 
-	Xtea.EncryptPacket((unsigned char *)Packet); // Encrypt it
-	NetworkClientCharList.SendMessageClient((char *)Packet,BufferLen+2); // Send it to the client
+	NetworkClientCharList.SendMessageClient(Tibia.CreateCharList(),34); // Send login packet to client
 
 	if(!NetworkClient.proxyReady) // Check if everyhtings OK
 	{
-		MessageBoxA(MainDialog,"Failed to initialize proxy.","TCam Player",MB_OK);
+		MessageBoxA(MainDialog,"Failed to initialize proxy.","Error",MB_OK);
 		return 1;
 	}
 
@@ -101,47 +97,6 @@ DWORD WINAPI MainThread(LPVOID lpParam)
 	}
 
 	return 0;
-}
-
-int CreateCharList(unsigned char *buffer, char *name) // Should be self explainatory
-{
-	int nLen = strlen(name);
-	int x = 27 + nLen;
-	while(x % 8 != 0)
-	{
-		x++;
-	}
-	buffer[0] = x;
-	buffer[1] = 0x00;
-	buffer[2] = 27 + nLen;
-	buffer[3] = 0x00;
-	buffer[4] = 0x14;
-	buffer[5] = 0x06;
-	buffer[6] = 0x00;
-	buffer[7] = 0x33;
-	buffer[8] = 0x33;
-	buffer[9] = 0x33;
-	buffer[10] = 0x4F;
-	buffer[11] = 0x6D;
-	buffer[12] = 0x67;
-	buffer[13] = 0x64;
-	buffer[14] = 0x01;
-	buffer[15] = nLen & 0xFF;
-	buffer[16] = 0x00;
-	memcpy(&buffer[17], name, nLen);
-	buffer[17+nLen] = 4 & 0xFF;
-	buffer[18+nLen] = 0x00;
-	memcpy(&buffer[19+nLen], "TCam", 4);
-	buffer[19+nLen+4] = (char)127;
-	buffer[20+nLen+4] = (char)0;
-	buffer[21+nLen+4] = (char)0;
-	buffer[22+nLen+4] = (char)1;
-	buffer[23+nLen+4] = 0xF0; // 7152
-	buffer[24+nLen+4] = 0x1B;
-	buffer[25+nLen+4] = 0xFF;
-	buffer[26+nLen+4] = 0xFF;
-
-	return x;
 }
 
 LRESULT APIENTRY TibiaHwNd(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam) // Hook to tibias message handler

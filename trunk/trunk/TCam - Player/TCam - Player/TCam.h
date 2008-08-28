@@ -6,6 +6,7 @@
 #include "TCamReader.h"
 #include "XTEA.h"
 #include "Registry.h"
+#include "Tibia.h"
 
 char fileName[MAX_PATH];
 char camFullPath[MAX_PATH];
@@ -34,11 +35,7 @@ RECT workArea;
 SPosition ScreenPosition;
 SRectScreen InitScreenSize;
 
-int CreateCharList(unsigned char *buffer, char *name);
 LRESULT APIENTRY TibiaHwNd(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
-
-BOOL QueryStringValue(const HKEY root,LPCSTR path,LPCSTR key,LPSTR buffer,DWORD &Length);
-BOOL CreateKey(const HKEY root,LPCSTR path,LPCSTR key,LPCSTR buffer,const DWORD length);
 
 DWORD WINAPI WindowUpdate(LPVOID lpParam);
 DWORD WINAPI UpdateTimers(LPVOID lpParam);
