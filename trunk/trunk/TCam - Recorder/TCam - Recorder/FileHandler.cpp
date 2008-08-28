@@ -31,6 +31,7 @@ void CFileHandler::Open(char *cFileName)
 	bStreamBusy = false;
 	startClock = clock();
 	delayTime = 0;
+	totalTime = 0;
 }
 
 /*************************************************************************************************
@@ -93,6 +94,7 @@ void CFileHandler::WriteDelay()
 {
 	delayTime = clock() - startClock;
 	startClock = clock();
+	totalTime += delayTime;
 
 	Write(DELAY_ID,1);
 	Write(4,2);
@@ -115,8 +117,27 @@ void CFileHandler::Export()
 		// TODO: process with debug reporter
 	}
 	myRecording.write((const char *)cData,nOffset);
+	
+	ifstream readStream;
+	readStream.open(fileName, ios::in | ios::binary | ios::ate);
+	readStream.seekg(0,ios_base::end);
+	int length = readStream.tellg();
+	unsigned char *cTemp = (unsigned char *)malloc(length);
+	readStream.seekg(0,ios_base::beg);
+	readStream.read((char *)cTemp,length);
+	readStream.close();
+
+	memcpy(&cTemp[5],&totalTime,4);
+
+	// TODO: add monster kills and player kills
+
+	myRecording.close();
+	myRecording.open(fileName, ios::out | ios::binary | ios::beg);
+	myRecording.write((const char *)cTemp,length);
 	myRecording.close();
 
 	nOffset = 0; // Reset offset
 	bStreamBusy = false;
+
+	free(cTemp);
 }

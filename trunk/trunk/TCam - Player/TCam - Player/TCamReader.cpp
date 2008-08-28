@@ -32,8 +32,11 @@ void CTCamReader::Open(string fName)
 	Nop(0x42333C,2);
 
 	CurrentPlayTime = 0;
-	TotalPlayTime = 20000;
+	TotalPlayTime = 0;
+	LeftOverTime = 1000;
 	bFirstPSent = 0;
+
+	SendNextPacket(); // Read the header
 }
 
 void CTCamReader::SendNextPacket()
@@ -94,6 +97,11 @@ void CTCamReader::SendNextPacket()
 			DelayTime(nTime);
 		}
 		break;
+	case HEADER_ID:
+		{
+			memcpy(&TotalPlayTime,&NextPacket.cBuffer[2],4);
+		}
+		break;
 	case PACKET_ID:
 		{
 			NetworkClient.SendMessageClient(NextPacket.cBuffer,NextPacket.nSize);
@@ -141,7 +149,21 @@ void CTCamReader::Nop(DWORD dwAddress, int size)
 
 void CTCamReader::DelayTime(unsigned int nMseconds)
 {
-	clock_t endwait;
-	endwait = clock () + nMseconds;
-	while (clock() < endwait) { Sleep(1); }
+	clock_t endwait, start;
+	endwait = clock() + nMseconds;
+	start = clock();
+
+	int temp = LeftOverTime;
+	
+	while (clock() < endwait)
+	{ 
+		if((clock() - start) >= temp)
+		{
+			CurrentPlayTime += 1000;
+			temp += 1000;
+		}
+		Sleep(1); 
+	}
+
+	LeftOverTime = temp - nMseconds;
 }

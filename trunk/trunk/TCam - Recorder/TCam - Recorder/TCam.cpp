@@ -133,7 +133,6 @@ BOOL CALLBACK MessageHandler(HWND hwnd, UINT Message, WPARAM wParam, LPARAM lPar
 					genMapPacket = false;
 					bRecording = false;
 
-					FileHandler.Write(TotalRecTime,4);
 					FileHandler.Export();
 				} else 
 				{
@@ -149,6 +148,7 @@ BOOL CALLBACK MessageHandler(HWND hwnd, UINT Message, WPARAM wParam, LPARAM lPar
 
 							Sleep(100);
 							FileHandler.Open(fileName);
+							Packet.CreateHeader();
 							FileHandler.WritePacket((unsigned char *)XTeaAddress,16,XTEA_ID);
 
 							if(Tibia.BattleListGet(*PLAYER_ID,BATTLELIST_Z) <= 7)
