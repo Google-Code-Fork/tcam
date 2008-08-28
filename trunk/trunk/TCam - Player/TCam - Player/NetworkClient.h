@@ -5,7 +5,7 @@
 #include "Globals.h"
 #include "XTEA.h"
 
-class CNetworkClient
+class CNetworkClient: public XTEA
 {
 public:
 	CNetworkClient();

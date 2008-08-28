@@ -2,8 +2,7 @@
 
 CTCamReader::CTCamReader()
 {
-	reset = false;
-	CurrentPlayTime = 0;
+	bReset = false;
 	PlayUntil = 0;
 }
 
@@ -13,7 +12,7 @@ CTCamReader::~CTCamReader()
 
 void CTCamReader::Open(string fName)
 {
-	TotalPlayTime = 0;
+	nTotalPlayTime = 0;
 	myRecording.open(fName.c_str(),ios::in | ios::binary | ios::ate);
 	fileSize = myRecording.tellg();
 	myRecording.seekg(0, ios::beg);
@@ -31,9 +30,10 @@ void CTCamReader::Open(string fName)
 	Nop(0x42330D,2);
 	Nop(0x42333C,2);
 
-	CurrentPlayTime = 0;
-	TotalPlayTime = 0;
-	LeftOverTime = 1000;
+	nCurrentPlayTime = 0;
+	nTotalPlayTime = 0;
+	nLeftOverTime = 1000;
+	nSpeed = 1.0;
 	bFirstPSent = 0;
 
 	SendNextPacket(); // Read the header
@@ -99,7 +99,7 @@ void CTCamReader::SendNextPacket()
 		break;
 	case HEADER_ID:
 		{
-			memcpy(&TotalPlayTime,&NextPacket.cBuffer[2],4);
+			memcpy(&nTotalPlayTime,&NextPacket.cBuffer[2],4);
 		}
 		break;
 	case PACKET_ID:
@@ -134,9 +134,9 @@ void CTCamReader::Advance(int numBytes)
 void CTCamReader::Reset(int time)
 {
 	byteOffset = 0;
-	reset = true;
+	bReset = true;
 	PlayUntil = time;
-	CurrentPlayTime = 0;
+	nCurrentPlayTime = 0;
 }
 
 void CTCamReader::Nop(DWORD dwAddress, int size)
@@ -149,21 +149,13 @@ void CTCamReader::Nop(DWORD dwAddress, int size)
 
 void CTCamReader::DelayTime(unsigned int nMseconds)
 {
-	clock_t endwait, start;
-	endwait = clock() + nMseconds;
-	start = clock();
-
-	int temp = LeftOverTime;
+	clock_t start = clock();
+	unsigned int temp = 0;
 	
-	while (clock() < endwait)
+	while (clock() < (start + (unsigned int)(nMseconds/nSpeed)))
 	{ 
-		if((clock() - start) >= temp)
-		{
-			CurrentPlayTime += 1000;
-			temp += 1000;
-		}
-		Sleep(1); 
+		nCurrentPlayTime += (int)(((clock() - start) - temp) * nSpeed);
+		temp = (clock() - start);
+		Sleep(1);
 	}
-
-	LeftOverTime = temp - nMseconds;
 }

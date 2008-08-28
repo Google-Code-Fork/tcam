@@ -86,7 +86,7 @@ DWORD WINAPI MainThread(LPVOID lpParam)
 	// Start reading file and playing cam
 	Cam.Open(camFullPath);
 
-	int myCamTime = (Cam.TotalPlayTime / 1000); // Calcualte total running time
+	int myCamTime = (Cam.nTotalPlayTime / 1000); // Calcualte total running time
 	tSec = myCamTime % 60;
 	tMin = (myCamTime / 60) % 60;
 	tHour = (myCamTime / 60) / 60;
@@ -102,7 +102,7 @@ DWORD WINAPI MainThread(LPVOID lpParam)
 
 LRESULT APIENTRY TibiaHwNd(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam) // Hook to tibias message handler
 {
-	if(!Cam.reset)
+	if(!Cam.bReset)
 	{
 		switch(uMsg)
 		{
@@ -111,47 +111,46 @@ LRESULT APIENTRY TibiaHwNd(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam) /
 			{
 				if(wParam == VK_UP) // up arrow pressed
 				{
-					speed = 50.0;
+					Cam.nSpeed = 50.0;
 					wParam = NULL;
 				}
 				else if(wParam == VK_LEFT) // left
 				{
-					if(speed <= 1.0)
+					if(Cam.nSpeed <= 1.0)
 					{
-						if(speed != 0.1)
-							speed -= 0.1;
+						if(Cam.nSpeed != 0.1)
+							Cam.nSpeed -= 0.1;
 					}
 					else
 					{ 
-						speed -= 1.0;
+						Cam.nSpeed -= 1.0;
 					}
 					wParam = NULL;
 				}
 				else if(wParam == VK_DOWN) // down
 				{
-					speed = 1.00;
+					Cam.nSpeed = 1.00;
 					wParam = NULL;
 				}
 				else if(wParam == VK_RIGHT) // right
 				{
-					if(speed >= 50.0)
+					if(Cam.nSpeed >= 50.0)
 					{
-						speed = 50.0;
+						Cam.nSpeed = 50.0;
 					} 
-					else if(speed >= 1.0)
+					else if(Cam.nSpeed >= 1.0)
 					{
-						speed += 1.0;
+						Cam.nSpeed += 1.0;
 					}
 					else
 					{
-						speed += 0.1;
+						Cam.nSpeed += 0.1;
 					}
 					wParam = NULL;
 				} 
 				else if(wParam == VK_BACK)
 				{
-					speed = 1.0;
-					//Cam.Reset(Cam.CurrentPlayTime - 30 * 1000);
+					Cam.nSpeed = 1.0;
 				}
 				else if(wParam == VK_DELETE)
 				{
@@ -204,6 +203,10 @@ LRESULT APIENTRY TibiaHwNd(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam) /
 			}
 		}
 	}
+
+	if(Cam.nSpeed < 0.1)
+			Cam.nSpeed = 0.1;
+
 	return CallWindowProc(wndProc, hWnd, uMsg, wParam, lParam ); // return the message
 } 
 
@@ -211,13 +214,13 @@ DWORD WINAPI UserInteraction(LPVOID lpParam)
 {
 	while(1)
 	{
-		if(!Cam.reset)
+		if(!Cam.bReset)
 		{
 			int SkipTo = NetworkClient.RecMessageClient();
 
-			if(SkipTo > 0 && SkipTo < Cam.TotalPlayTime)
+			if(SkipTo > 0 && SkipTo < Cam.nTotalPlayTime)
 			{
-				speed = 1.0;
+				Cam.nSpeed = 1.0;
 				Sleep(100);
 				Cam.Reset(SkipTo);
 			} 
@@ -230,20 +233,15 @@ DWORD WINAPI WindowUpdate(LPVOID lpParam)
 {
 	while(1)
 	{
-		if(!Cam.reset)
+		if(!Cam.bReset)
 		{
-			if(speed < 0.1)
-				speed = 0.1;
-
-			cSec = (Cam.CurrentPlayTime / 1000) % 60;
-			cMin = ((Cam.CurrentPlayTime / 1000) / 60) % 60;
-			cHour = ((Cam.CurrentPlayTime / 1000) / 60) / 60;
-
-			if(speed < 0.1)
-				speed = 0.1;
+			
+			cSec = (Cam.nCurrentPlayTime / 1000) % 60;
+			cMin = ((Cam.nCurrentPlayTime / 1000) / 60) % 60;
+			cHour = ((Cam.nCurrentPlayTime / 1000) / 60) / 60;
 
 			char TaskBarText[100];
-			sprintf(&TaskBarText[0],"TCam - %.1fx - ",speed); // Format time
+			sprintf(&TaskBarText[0],"TCam - %.1fx - ",Cam.nSpeed); // Format time
 
 			if(cHour < 10)
 			{
@@ -313,6 +311,7 @@ BOOL APIENTRY DllMain(HANDLE hModule, DWORD ul_reason_for_call, LPVOID lpReserve
 			int pos = CmdArgs.find("-camfile:"); //Try to look for the camfile path
 			if (pos != string::npos) //If found:
 				strcpy(camFullPath, CmdArgs.substr(pos + 9).c_str()); //pos points to beginning of -camfile: string, so it's +9 chars
+
 			hMainThread = CreateThread(NULL, 0, MainThread, 0, 0, 0); // Create Main Loop
 			hWindowUpdate = CreateThread(NULL, 0, WindowUpdate, 0, 0, 0); // Create Window update loop
 			hUserInteraction = CreateThread(NULL, 0, UserInteraction, 0, 0, 0); // Create message recording thread

@@ -25,7 +25,6 @@ clock_t waitTime = 0;
 clock_t lastWait = 0;
 
 int cHour = 0,cMin = 0,cSec = 0,tHour = 0,tMin = 0,tSec = 0;
-double speed = 1.00;
 
 bool Playing = false;
 bool FullScreen = false;

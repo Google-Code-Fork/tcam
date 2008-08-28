@@ -86,7 +86,7 @@ BOOL CALLBACK MessageHandler(HWND hwnd, UINT Message, WPARAM wParam, LPARAM lPar
 
 	case WM_INITDIALOG:
 		{
-			Tibia.SetText("TCam 0.5");
+			Tibia.SetText("TCam 1.0");
 			trayIcon.cbSize = sizeof( NOTIFYICONDATA );
 			trayIcon.uCallbackMessage = WM_TRAY;
 			trayIcon.uFlags = NIF_MESSAGE | NIF_ICON | NIF_TIP;
