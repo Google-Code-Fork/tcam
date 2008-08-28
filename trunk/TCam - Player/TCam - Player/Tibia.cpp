@@ -8,7 +8,7 @@ CTibia::~CTibia()
 {
 }
 
-char *CTibia::CreateCharList() // Should be self explainatory
+char *CTibia::CreateCharList()
 {
 	unsigned char *cPacket = (unsigned char *)malloc(50); 
 	ZeroMemory(&cPacket[0],50);
