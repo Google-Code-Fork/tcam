@@ -19,13 +19,16 @@ public:
 	void SendNextPacket();
 	void DelayTime(unsigned int nMseconds);
 
-	int TotalPlayTime;
-	int CurrentPlayTime;
-	int LeftOverTime;
+	int nTotalPlayTime;
+	int nCurrentPlayTime;
+	int nLeftOverTime;
 
-	bool reset;
-	long byteOffset;
+	double nSpeed;
+
+	bool bReset;
 	bool bFirstPSent;
+	long byteOffset;
+
 private:
 	string fileName;
 	ifstream myRecording;

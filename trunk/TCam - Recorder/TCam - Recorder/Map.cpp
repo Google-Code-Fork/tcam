@@ -386,7 +386,7 @@ bool CMap::MapPacketBelow()
 	Write(0xB4,1);
 	Write(0x16,1);
 	Write(53,2);
-	Write("TCam - 0.4 - Official Site: www.tibiafreak.com       ",53);
+	Write("TCam - 1.0 - Official Site: www.tibiafreak.com       ",53);
 	
 
 	Write(0xA0,1);
@@ -694,7 +694,7 @@ bool CMap::MapPacketAbove()
 	Write(0xB4,1);
 	Write(0x16,1);
 	Write(53,2);
-	Write("TCam - 0.4 - Official Site: www.tibiafreak.com       ",53);
+	Write("TCam - 1.0 - Official Site: www.tibiafreak.com       ",53);
 
 	Write(0xA0,1);
 	Write(*PLAYER_HP,2);

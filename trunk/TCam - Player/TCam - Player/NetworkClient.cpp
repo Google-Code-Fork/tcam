@@ -1,8 +1,6 @@
 #include "NetworkClient.h"
 #include "Constants.h"
 
-XTEA nXtea;
-
 CNetworkClient::CNetworkClient()
 {
 }
@@ -109,11 +107,11 @@ int CNetworkClient::SendMessageClient(char *lpBuffer, int nSize)
 
 int CNetworkClient::RecMessageClient()
 {
-	char buffer[1000];
+	char buffer[10000];
 	int RecievedBytes;
 	ZeroMemory(buffer,sizeof(buffer));
 
-	RecievedBytes = recv(clientSoc,buffer,1000,0);
+	RecievedBytes = recv(clientSoc,buffer,10000,0);
 
 	if(RecievedBytes == SOCKET_ERROR)
 	{
@@ -121,7 +119,7 @@ int CNetworkClient::RecMessageClient()
 	}
 	else
 	{
-		nXtea.DecryptPacket((unsigned char *)buffer);
+		DecryptPacket((unsigned char *)buffer);
 
 		int MessageLen = 0;
 		int PacketID = 0;
