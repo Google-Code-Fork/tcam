@@ -100,13 +100,13 @@ void CTCamReader::SendNextPacket()
 			if(!bFirstPSent)
 			{
 				bFirstPSent = true;
-				DelayTime(100);
+				DelayTime(100); // If its the map packet, give it time
 			}
 		}
 		break;
 	default:
 		{
-			MessageBoxA(0,"This should not happen!","Test",MB_OK);
+			MessageBoxA(0,"Unknown packet ID during playback","Error",MB_OK);
 		}
 		break;
 	}

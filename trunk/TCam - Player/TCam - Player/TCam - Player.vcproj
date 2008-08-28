@@ -180,6 +180,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\Tibia.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\XTEA.cpp"
 				>
 			</File>
@@ -215,6 +219,10 @@
 			</File>
 			<File
 				RelativePath=".\TCamReader.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Tibia.h"
 				>
 			</File>
 			<File
