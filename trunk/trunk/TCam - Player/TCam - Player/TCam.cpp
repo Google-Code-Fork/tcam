@@ -103,111 +103,109 @@ DWORD WINAPI MainThread(LPVOID lpParam)
 
 LRESULT APIENTRY TibiaHwNd(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam) // Hook to tibias message handler
 {
-	if(!Cam.bReset)
-	{
-		switch(uMsg)
-		{
 
-		case WM_KEYDOWN:
+	switch(uMsg)
+	{
+
+	case WM_KEYDOWN:
+		{
+			if(wParam == VK_UP) // up arrow pressed
 			{
-				if(wParam == VK_UP) // up arrow pressed
+				Cam.nSpeed = 50.0;
+				wParam = NULL;
+			}
+			else if(wParam == VK_LEFT) // left
+			{
+				if(Cam.nSpeed <= 1.0)
+				{
+					if(Cam.nSpeed != 0.1)
+						Cam.nSpeed -= 0.1;
+				}
+				else
+				{ 
+					Cam.nSpeed -= 1.0;
+				}
+				wParam = NULL;
+			}
+			else if(wParam == VK_DOWN) // down
+			{
+				Cam.nSpeed = 1.00;
+				wParam = NULL;
+			}
+			else if(wParam == VK_RIGHT) // right
+			{
+				if(Cam.nSpeed >= 50.0)
 				{
 					Cam.nSpeed = 50.0;
-					wParam = NULL;
-				}
-				else if(wParam == VK_LEFT) // left
-				{
-					if(Cam.nSpeed <= 1.0)
-					{
-						if(Cam.nSpeed != 0.1)
-							Cam.nSpeed -= 0.1;
-					}
-					else
-					{ 
-						Cam.nSpeed -= 1.0;
-					}
-					wParam = NULL;
-				}
-				else if(wParam == VK_DOWN) // down
-				{
-					Cam.nSpeed = 1.00;
-					wParam = NULL;
-				}
-				else if(wParam == VK_RIGHT) // right
-				{
-					if(Cam.nSpeed >= 50.0)
-					{
-						Cam.nSpeed = 50.0;
-					} 
-					else if(Cam.nSpeed >= 1.0)
-					{
-						Cam.nSpeed += 1.0;
-					}
-					else
-					{
-						Cam.nSpeed += 0.1;
-					}
-					wParam = NULL;
 				} 
-				else if(wParam == VK_BACK)
+				else if(Cam.nSpeed >= 1.0)
 				{
-					Cam.nSpeed = 1.0;
-					Cam.Reset(Cam.nCurrentPlayTime - (30 * 1000));
+					Cam.nSpeed += 1.0;
 				}
-				else if(wParam == VK_DELETE)
+				else
 				{
-					Sleep(1000);
+					Cam.nSpeed += 0.1;
+				}
+				wParam = NULL;
+			} 
+			else if(wParam == VK_BACK)
+			{
+				Cam.nSpeed = 1.0;
+				Cam.Reset(Cam.nCurrentPlayTime - (30 * 1000));
+			}
+			else if(wParam == VK_DELETE)
+			{
 
-					if (SystemParametersInfo(SPI_GETWORKAREA, 0, &workArea, 0))
-					{
-						ScreenPosition.pX = GetSystemMetrics(SM_CXSCREEN); // Screen Height
-						ScreenPosition.pY = (workArea.bottom - workArea.top); // Screen Width
-					}  
+				if (SystemParametersInfo(SPI_GETWORKAREA, 0, &workArea, 0))
+				{
+					ScreenPosition.pX = GetSystemMetrics(SM_CXSCREEN); // Screen Height
+					ScreenPosition.pY = (workArea.bottom - workArea.top); // Screen Width
+				}  
 
-					static int *ScreenPtr2 = (int *)(*ScreenPtr1 + 0x44);
-					static int *ScreenPtr3 = (int *)(*ScreenPtr2 + 0x10);
-					static int *ScreenPtr4 = (int *)(*ScreenPtr3 + 0x24);
+				static int *ScreenPtr2 = (int *)(*ScreenPtr1 + 0x44);
+				static int *ScreenPtr3 = (int *)(*ScreenPtr2 + 0x10);
+				static int *ScreenPtr4 = (int *)(*ScreenPtr3 + 0x24);
 
-					SRectScreen *ScreenStruct = (SRectScreen *)(*ScreenPtr4);
+				SRectScreen *ScreenStruct = (SRectScreen *)(*ScreenPtr4);
 
-					int *ChatPtr1 = (int *)(*ScreenPtr1 + 0x40);
-					int *ChatPtr2 = (int *)(*ChatPtr1 + 0x10);
-					int *ChatBar = (int *)(*ChatPtr2 + 0x18);
+				int *ChatPtr1 = (int *)(*ScreenPtr1 + 0x40);
+				int *ChatPtr2 = (int *)(*ChatPtr1 + 0x10);
+				int *ChatBar = (int *)(*ChatPtr2 + 0x18);
 
-					if(FullScreen)
-					{
-						ScreenStruct->posX = InitScreenSize.posX;
-						ScreenStruct->posY = InitScreenSize.posY;
-						ScreenStruct->sHeight = InitScreenSize.sHeight;
-						ScreenStruct->sWidth = InitScreenSize.sWidth;
-						*ChatBar = ScreenPosition.pZ;
+				if(FullScreen)
+				{
+					ScreenStruct->posX = InitScreenSize.posX;
+					ScreenStruct->posY = InitScreenSize.posY;
+					ScreenStruct->sHeight = InitScreenSize.sHeight;
+					ScreenStruct->sWidth = InitScreenSize.sWidth;
+					*ChatBar = ScreenPosition.pZ;
 
-						FullScreen = false;
-					} else
-					{
-						InitScreenSize.posX = ScreenStruct->posX;
-						InitScreenSize.posY = ScreenStruct->posY;
-						InitScreenSize.sHeight = ScreenStruct->sHeight;
-						InitScreenSize.sWidth = ScreenStruct->sWidth;
+					FullScreen = false;
+				} else
+				{
+					InitScreenSize.posX = ScreenStruct->posX;
+					InitScreenSize.posY = ScreenStruct->posY;
+					InitScreenSize.sHeight = ScreenStruct->sHeight;
+					InitScreenSize.sWidth = ScreenStruct->sWidth;
 
-						ScreenPosition.pZ = *ChatBar;
+					ScreenPosition.pZ = *ChatBar;
 
-						ScreenStruct->sHeight = ScreenPosition.pY;
-						ScreenStruct->sWidth = ScreenPosition.pX;
-						ScreenStruct->posX = 0;
-						ScreenStruct->posY = 0;
+					ScreenStruct->sHeight = ScreenPosition.pY;
+					ScreenStruct->sWidth = ScreenPosition.pX;
+					ScreenStruct->posX = 0;
+					ScreenStruct->posY = 0;
 
-						*ChatBar = 9999;
+					*ChatBar = 9999;
 
-						FullScreen = true;
-					}
+					FullScreen = true;
 				}
 			}
 		}
 	}
 
+
 	if(Cam.nSpeed < 0.1)
-			Cam.nSpeed = 0.1;
+		Cam.nSpeed = 0.1;
 
 	return CallWindowProc(wndProc, hWnd, uMsg, wParam, lParam ); // return the message
 } 
@@ -222,8 +220,7 @@ DWORD WINAPI UserInteraction(LPVOID lpParam)
 
 			if(SkipTo > 0 && SkipTo < Cam.nTotalPlayTime)
 			{
-				Cam.nSpeed = 1.0;
-				Sleep(100);
+				Cam.nSpeed = 50.0;
 				Cam.Reset(SkipTo);
 			} 
 			Sleep(1);
@@ -237,7 +234,7 @@ DWORD WINAPI WindowUpdate(LPVOID lpParam)
 	{
 		if(!Cam.bReset)
 		{
-			
+
 			cSec = (Cam.nCurrentPlayTime / 1000) % 60;
 			cMin = ((Cam.nCurrentPlayTime / 1000) / 60) % 60;
 			cHour = ((Cam.nCurrentPlayTime / 1000) / 60) / 60;
