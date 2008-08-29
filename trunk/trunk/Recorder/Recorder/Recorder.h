@@ -23,6 +23,13 @@ void ModifyToken();
 BOOL LoadDll();
 BOOL InjectDLL(DWORD ProcessID, char *dllName);
 unsigned long GetTargetProcessIdFromProcname(char *procName);
-BOOL CALLBACK MessageHandler(HWND hwnd, UINT Message, WPARAM wParam, LPARAM lParam);
+void GetError(DWORD dwErrorCode, char *lpFunction);
+bool CheckDll(void);
+void RefreshList(void);
+void GetPlayerName(HANDLE hProcess, char *lpName);
+bool InjectLibrary(DWORD dwProcessId, char* lpDll);
+bool InitializeWindow(HINSTANCE hInstance, int nShowCmd);
+LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
+
 
 #endif
