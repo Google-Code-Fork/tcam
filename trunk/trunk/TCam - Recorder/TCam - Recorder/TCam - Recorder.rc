@@ -53,13 +53,26 @@ END
 //
 
 IDD_MAIN DIALOGEX 0, 0, 130, 51
-STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | WS_SYSMENU
+STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | DS_CENTER | WS_POPUP | WS_CAPTION | WS_SYSMENU
 EXSTYLE WS_EX_PALETTEWINDOW
 CAPTION "TCam - 1.0 -Recorder"
+MENU IDR_MENU1
 FONT 8, "MS Shell Dlg", 400, 0, 0x1
 BEGIN
     PUSHBUTTON      "Record",IDC_RECORD,31,25,66,14
     LTEXT           "http://www.tibiafreak.com/",IDC_VISITSITE,20,11,94,9,SS_NOTIFY
+END
+
+IDD_CREDITS DIALOGEX 0, 0, 186, 91
+STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | WS_SYSMENU
+EXSTYLE WS_EX_TOOLWINDOW
+CAPTION "Credits"
+FONT 8, "MS Shell Dlg", 400, 0, 0x1
+BEGIN
+    LTEXT           "TCam 1.0",IDC_STATIC,74,10,59,13
+    LTEXT           "[Project Leader] - Oblivion (Jeremic)",IDC_STATIC,17,22,118,11
+    LTEXT           "[Developer]        - OsQu",IDC_STATIC,17,32,118,11
+    LTEXT           "Many thanks to Stiju for providing Injector source and general help http://www.tpforums.org/forum/member.php?u=6",IDC_STATIC,12,50,165,34
 END
 
 
@@ -78,6 +91,14 @@ BEGIN
         TOPMARGIN, 7
         BOTTOMMARGIN, 44
     END
+
+    IDD_CREDITS, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 179
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 84
+    END
 END
 #endif    // APSTUDIO_INVOKED
 
@@ -90,6 +111,20 @@ END
 // Icon with lowest ID value placed first to ensure application icon
 // remains consistent on all systems.
 IDI_FIRE                ICON                    "Picasa.ico"
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Menu
+//
+
+IDR_MENU1 MENU 
+BEGIN
+    POPUP "Help"
+    BEGIN
+        MENUITEM "Credits",                     ID_HELP_CREDITS
+    END
+END
+
 #endif    // English (Canada) resources
 /////////////////////////////////////////////////////////////////////////////
 

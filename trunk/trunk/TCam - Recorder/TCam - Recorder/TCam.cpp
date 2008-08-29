@@ -183,9 +183,34 @@ BOOL CALLBACK MessageHandler(HWND hwnd, UINT Message, WPARAM wParam, LPARAM lPar
 				ShellExecute( NULL, "open", "explorer", "http://www.tibiafreak.com", NULL, SW_SHOWMAXIMIZED );
 			}
 			break;
+		case ID_HELP_CREDITS:
+			{
+				DialogBox(hInstance, MAKEINTRESOURCE(IDD_CREDITS), NULL, CreditsHandler);
+			}
+			break;
 		}
 
 		break;
+	case WM_DESTROY:
+		break;
+
+	}
+	return 0;
+}
+
+BOOL CALLBACK CreditsHandler(HWND hwnd, UINT Message, WPARAM wParam, LPARAM lParam)
+{
+	switch(Message)
+	{
+
+	case WM_INITDIALOG:
+		{
+		}
+		break;
+	case WM_CLOSE:
+		{
+			DestroyWindow(hwnd);
+		}
 	case WM_DESTROY:
 		break;
 

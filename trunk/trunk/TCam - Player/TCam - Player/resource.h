@@ -3,7 +3,6 @@
 // Used by TCam - Player.rc
 //
 #define IDD_DIALOG1                     101
-#define IDD_MAIN                        101
 
 // Next default values for new objects
 // 
