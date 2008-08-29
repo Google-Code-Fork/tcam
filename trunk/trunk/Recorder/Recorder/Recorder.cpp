@@ -4,12 +4,14 @@ CRegistry Registry;
 
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR szCmdLine, int iCmdShow)
 {
+	CConfig config("\\config.ini");
 	ModifyToken();
-	DWORD Len = 260;
-	if(!Registry.QueryStringValue(HKEY_LOCAL_MACHINE,"Software\\TibiaFreak\\TCam", "Record",RecorderDLL,Len))
+	if(!config.GetPath("822", "Record", RecorderDLL))
 	{
-		MessageBox(NULL, "Could not find path to DLL \n Please reinstall the application", "Loader", NULL);
-		exit(1);
+		GetModuleFileName(NULL, RecorderDLL, MAX_PATH);
+		PathRemoveFileSpec(RecorderDLL);
+		strcat(RecorderDLL, "\\TCam - Recorder.dll");
+		config.SetPath("822", "Record", RecorderDLL);
 	}
 	LoadDll();
 

@@ -8,6 +8,7 @@
 #include <tlhelp32.h>
 #include <shlwapi.h>
 #include "Registry.h"
+#include "..\..\Global Classes\Config.h"
 
 using namespace std;
 
