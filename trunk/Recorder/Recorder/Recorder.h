@@ -14,9 +14,15 @@ using namespace std;
 
 char RecorderDLL[MAX_PATH];
 
+HWND MainDialog;
+
+HWND list[100];
+int nCurrentHandle;
+
 void ModifyToken();
 BOOL LoadDll();
 BOOL InjectDLL(DWORD ProcessID, char *dllName);
 unsigned long GetTargetProcessIdFromProcname(char *procName);
+BOOL CALLBACK MessageHandler(HWND hwnd, UINT Message, WPARAM wParam, LPARAM lParam);
 
 #endif
