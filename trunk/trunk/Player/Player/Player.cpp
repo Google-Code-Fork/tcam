@@ -66,9 +66,13 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR szCmdLine,
 			CREATE_DEFAULT_ERROR_MODE | CREATE_NEW_CONSOLE, NULL,
 			TibiaDir, &si, &pi, PlayerDLL, 0 );
 
+		
 		if (!bSuccess)
 		{
 			MessageBoxA(0,"Could not create process.","Error",MB_OK);
+		} else
+		{
+			SetForegroundWindow((HWND)pi.hProcess);
 		}
 
 	} else
