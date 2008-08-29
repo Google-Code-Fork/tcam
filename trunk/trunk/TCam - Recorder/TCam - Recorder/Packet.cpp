@@ -26,6 +26,9 @@ void CPacket::PhrasePacket(unsigned char *cBuffer, int nSize)
 	unsigned char *cMyBuf = (unsigned char *)malloc(10); // Allocate memory to hold unenecrypted packet
 	memcpy(&cMyBuf[0],&cBuffer[0],10);
 
+	cMyBuf[0] = 0x08;
+	cMyBuf[1] = 0x00;
+
 	DecryptPacket(cMyBuf); // Decrypt packet
 
 	if(cMyBuf[4] == 0x0A) // PLAYER_ID change, only happens when relogging
