@@ -26,6 +26,7 @@ clock_t start;
 int delay;
 
 NOTIFYICONDATA trayIcon; // Tray icon
+BOOL CALLBACK CreditsHandler(HWND hwnd, UINT Message, WPARAM wParam, LPARAM lParam);
 
 typedef int (APIENTRY __stdcall* FUNC_SENDBEGIN)(SOCKET s,const char *buf,int len,int flags); //Send function prototype
 typedef int (APIENTRY __stdcall* FUNC_RECVBEGIN)(SOCKET s,const char *buf,int len,int flags); //Recv function prototype
