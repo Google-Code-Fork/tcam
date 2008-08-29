@@ -140,6 +140,7 @@ void CTCamReader::Reset(int time)
 	{
 		time = 0;
 		bReset = false;
+		nSpeed = 1.0;
 	}
 
 	nPlayUntil = time;
