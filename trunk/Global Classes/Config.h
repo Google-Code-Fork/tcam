@@ -4,6 +4,9 @@
 #include <windows.h>
 #include <string>
 
+#include <shlwapi.h>
+#pragma comment(lib, "shlwapi.lib") 
+
 class CConfig
 {
 public:

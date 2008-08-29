@@ -3,12 +3,12 @@
 CConfig::CConfig(LPCTSTR filename)
 {
 	/* Config file is stored to the same directory as the .exe */
-	LPCTSTR fbuffer = new char[MAX_PATH];
-	GetCurrentDirectory(MAX_PATH, (LPSTR)fbuffer);
-	strcat((char*)fbuffer, filename);
+	char *fbuffer = new char[MAX_PATH];
+	GetModuleFileName(NULL, fbuffer, MAX_PATH);
+	PathRemoveFileSpec(fbuffer);
 
+	strcat(fbuffer, filename);
 	fileName = fbuffer;
-	
 }
 
 CConfig::~CConfig()

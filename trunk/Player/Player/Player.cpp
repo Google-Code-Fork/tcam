@@ -4,6 +4,7 @@ CRegistry Registry;
 
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR szCmdLine, int iCmdShow)
 {
+	CConfig config("\\config.ini");
 	if(strlen(szCmdLine) != NULL)
 	{
 		ModifyToken();
@@ -13,7 +14,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR szCmdLine,
 		Registry.CreateKey(HKEY_LOCAL_MACHINE, "Software\\TibiaFreak\\TCam", "CamPlaying", camFilePath,strlen(camFilePath));
 
 		DWORD Len = 260;
-		if(!Registry.QueryStringValue(HKEY_LOCAL_MACHINE,"Software\\TibiaFreak\\TCam", "TibiaPath",TibiaPath,Len))
+		if(!config.GetPath("822", "TibiaPath", TibiaPath))
 		{
 			while(1)
 			{
@@ -21,7 +22,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR szCmdLine,
 				{
 					if(CheckVersion(TibiaPath))
 					{
-						Registry.CreateKey(HKEY_LOCAL_MACHINE, "Software\\TibiaFreak\\TCam", "TibiaPath", TibiaPath,strlen(TibiaPath));
+						config.SetPath("822", "TibiaPath", TibiaPath);
 						break;
 					}
 				}
@@ -36,7 +37,14 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR szCmdLine,
 		}
 
 		DWORD sdf = 260;
-		Registry.QueryStringValue(HKEY_LOCAL_MACHINE,"Software\\TibiaFreak\\TCam", "Player",PlayerDLL,sdf);
+		if(!config.GetPath("822", "Player", PlayerDLL))
+		{
+			//Get the .exe dir
+			GetModuleFileName(NULL, PlayerDLL, MAX_PATH);
+			PathRemoveFileSpec(PlayerDLL);
+			strcat(PlayerDLL, "\\TCam - Player.dll");
+			config.SetPath("822", "Player", PlayerDLL);
+		}
 
 		memcpy(&TibiaDir[0],&TibiaPath[0],MAX_PATH);
 		strrchr(TibiaDir, '\\')[0] = '\0';
