@@ -36,7 +36,6 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR szCmdLine,
 			}
 		}
 
-		DWORD sdf = 260;
 		if(!config.GetPath("822", "Player", PlayerDLL))
 		{
 			//Get the .exe dir

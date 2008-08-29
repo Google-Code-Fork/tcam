@@ -1,4 +1,5 @@
 #include "Recorder.h"
+#include "resource.h"
 
 CRegistry Registry;
 
