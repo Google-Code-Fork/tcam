@@ -111,7 +111,7 @@ LRESULT APIENTRY TibiaHwNd(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam) /
 		{
 			if(wParam == VK_UP) // up arrow pressed
 			{
-				Cam.nSpeed = 50.0;
+				Cam.nSpeed = 100.0;
 				wParam = NULL;
 			}
 			else if(wParam == VK_LEFT) // left
@@ -134,9 +134,9 @@ LRESULT APIENTRY TibiaHwNd(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam) /
 			}
 			else if(wParam == VK_RIGHT) // right
 			{
-				if(Cam.nSpeed >= 50.0)
+				if(Cam.nSpeed >= 100.0)
 				{
-					Cam.nSpeed = 50.0;
+					Cam.nSpeed = 100.0;
 				} 
 				else if(Cam.nSpeed >= 1.0)
 				{
@@ -150,7 +150,7 @@ LRESULT APIENTRY TibiaHwNd(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam) /
 			} 
 			else if(wParam == VK_BACK)
 			{
-				Cam.nSpeed = 1.0;
+				Cam.nSpeed = 50.0;
 				Cam.Reset(Cam.nCurrentPlayTime - (30 * 1000));
 			}
 			else if(wParam == VK_DELETE)
@@ -203,7 +203,6 @@ LRESULT APIENTRY TibiaHwNd(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam) /
 		}
 	}
 
-
 	if(Cam.nSpeed < 0.1)
 		Cam.nSpeed = 0.1;
 
@@ -232,9 +231,6 @@ DWORD WINAPI WindowUpdate(LPVOID lpParam)
 {
 	while(1)
 	{
-		if(!Cam.bReset)
-		{
-
 			cSec = (Cam.nCurrentPlayTime / 1000) % 60;
 			cMin = ((Cam.nCurrentPlayTime / 1000) / 60) % 60;
 			cHour = ((Cam.nCurrentPlayTime / 1000) / 60) / 60;
@@ -294,7 +290,6 @@ DWORD WINAPI WindowUpdate(LPVOID lpParam)
 			SetWindowText(hWnd, TaskBarText); // Update Text
 
 			Sleep(1); // Avoid using 100% cpu
-		}
 	}
 
 	return 0;
