@@ -23,8 +23,8 @@ Return:
 *************************************************************************************************/
 void CPacket::PhrasePacket(unsigned char *cBuffer, int nSize)
 {
-	unsigned char *cMyBuf = (unsigned char *)malloc(nSize); // Allocate memory to hold unenecrypted packet
-	memcpy(&cMyBuf[0],&cBuffer[0],nSize);
+	unsigned char *cMyBuf = (unsigned char *)malloc(10); // Allocate memory to hold unenecrypted packet
+	memcpy(&cMyBuf[0],&cBuffer[0],10);
 
 	DecryptPacket(cMyBuf); // Decrypt packet
 
