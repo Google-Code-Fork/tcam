@@ -42,42 +42,42 @@ void CNetworkClient::Setup(int nPort, bool bLogin)
 
 	WSADATA wsaData;
 
-    sockaddr_in local;
+	sockaddr_in local;
 
-    int wsaret = WSAStartup(0x101,&wsaData); // Startup
+	int wsaret = WSAStartup(0x101,&wsaData); // Startup
 
-    if(wsaret!=0)
-    {
+	if(wsaret!=0)
+	{
 		error.append("Error: WSA failed to startup!\n");
-        return;
-    }
+		return;
+	}
 
-    local.sin_family = AF_INET;
-    local.sin_addr.s_addr = INADDR_ANY; // Any local address
-    local.sin_port = htons((u_short)nPort); // Port 7171
+	local.sin_family = AF_INET;
+	local.sin_addr.s_addr = INADDR_ANY; // Any local address
+	local.sin_port = htons((u_short)nPort); // Port 7171
 
-    listenSoc = socket(AF_INET,SOCK_STREAM,0); // Initialize socket
+	listenSoc = socket(AF_INET,SOCK_STREAM,0); // Initialize socket
 
 
-    if(listenSoc == INVALID_SOCKET)
-    {
+	if(listenSoc == INVALID_SOCKET)
+	{
 		error.append("Error: Socket failed to startup!\n");
-        return;
-    }
+		return;
+	}
 
 
-    if(bind(listenSoc,(sockaddr*)&local,sizeof(local)) != 0)
-    {
+	if(bind(listenSoc,(sockaddr*)&local,sizeof(local)) != 0)
+	{
 		error.append("Error: Failed to bind to port 7171!\n");
-        return;
-    }
+		return;
+	}
 
 
-    if(listen(listenSoc,5) != 0)
-    {
+	if(listen(listenSoc,5) != 0)
+	{
 		error.append("Error: Listen failed!\n");
-        return;
-    }
+		return;
+	}
 
 	proxyReady = true;
 }
@@ -86,16 +86,16 @@ void CNetworkClient::Setup(int nPort, bool bLogin)
 bool CNetworkClient::StartListenClient()
 {
 
-    sockaddr_in from;
-    int fromlen = sizeof(from);
+	sockaddr_in from;
+	int fromlen = sizeof(from);
 
-    clientSoc = accept(listenSoc, (struct sockaddr*)&from, &fromlen); // Accept connection
+	clientSoc = accept(listenSoc, (struct sockaddr*)&from, &fromlen); // Accept connection
 
 	if(clientSoc != INVALID_SOCKET)
 	{
 		return true;
 	}
-	
+
 	error.append("Error: Accept failed!\n");
 	return false;
 }
@@ -128,25 +128,24 @@ int CNetworkClient::RecMessageClient()
 		if(PacketID == 0x96)
 		{
 			memcpy(&MessageLen,&buffer[6],1);
-			if(MessageLen == 9)
+			if(MessageLen == 10)
 			{
+				char Command[5];
+				ZeroMemory(Command,sizeof(Command));
+				memcpy(&Command[0],&buffer[8],4);
 
-			char Command[3];
-			ZeroMemory(Command,sizeof(Command));
-			memcpy(&Command[0],&buffer[8],3);
+				char cHour[2];
+				char cMinute[2];
+				memcpy(&cHour[0],&buffer[13],2);
+				memcpy(&cMinute[0],&buffer[16],2);
 
-			char cHour[2];
-			char cMinute[2];
-			memcpy(&cHour[0],&buffer[12],2);
-			memcpy(&cMinute[0],&buffer[15],2);
+				int Hour = atoi(cHour);
+				int Minute = atoi(cMinute);
 
-			int Hour = atoi(cHour);
-			int Minute = atoi(cMinute);
-
-			if(strcmp(Command,"ffu") == 0)
-			{
-				return (((Hour * 3600) + (Minute * 60))*1000);
-			}
+				if(strcmp(&Command[0],"goto") == 0)
+				{
+					return (((Hour * 3600) + (Minute * 60))*1000);
+				}
 			}
 		}
 		return 0;

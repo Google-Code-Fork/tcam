@@ -158,21 +158,24 @@ void CTCamReader::DelayTime(unsigned int nMseconds)
 {
 	if(!bReset)
 	{
-	unsigned int temp = 0;
-	
-	clock_t start = clock();
-	while (clock() < (start + (unsigned int)(nMseconds/nSpeed)))
-	{ 
-		nCurrentPlayTime += (int)(((clock() - start) - temp) * nSpeed);
-		temp = (clock() - start);
-		Sleep(1);
-	}
+		unsigned int temp = 0;
 
-	nCurrentPlayTime += (int)(((clock() - start) - temp) * nSpeed);
+		clock_t start = clock();
+		while (clock() < (start + (unsigned int)(nMseconds/nSpeed)))
+		{ 
+			nCurrentPlayTime += (int)(((clock() - start) - temp) * nSpeed);
+			temp = (clock() - start);
+			Sleep(1);
+		}
+
+		nCurrentPlayTime += (int)(((clock() - start) - temp) * nSpeed);
 	} else
 	{
 		nCurrentPlayTime += nMseconds;
 		if(nCurrentPlayTime > nPlayUntil)
+		{
 			bReset = false;
+			nSpeed = 1.00;
+		}
 	}
 }
