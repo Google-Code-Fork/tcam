@@ -108,7 +108,6 @@ DWORD WINAPI MainThread(LPVOID lpParam)
 	while(1)
 	{
 		Cam.SendNextPacket();
-	
 	}
 
 	return 0;

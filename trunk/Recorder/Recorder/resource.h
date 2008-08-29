@@ -3,9 +3,6 @@
 // Used by Recorder.rc
 //
 #define IDI_ICON1                       101
-#define IDD_MAIN                        102
-#define IDC_CLIENT_LIST                 1001
-#define IDC_OK                          1002
 
 // Next default values for new objects
 // 
