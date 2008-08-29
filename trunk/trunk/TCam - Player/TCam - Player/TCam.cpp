@@ -131,6 +131,9 @@ LRESULT APIENTRY TibiaHwNd(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam) /
 			}
 			else if(wParam == VK_LEFT) // left
 			{
+				if(Cam.nSpeed <= 10)
+					Tibia.ChangeFPS(Tibia.dOldFPS);
+
 				if(Cam.nSpeed <= 1.0)
 				{
 					if(Cam.nSpeed != 0.1)
@@ -150,6 +153,8 @@ LRESULT APIENTRY TibiaHwNd(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam) /
 			}
 			else if(wParam == VK_RIGHT) // right
 			{
+				if(Cam.nSpeed > 10)
+					Tibia.ChangeFPS(100);
 				if(Cam.nSpeed >= 50.0)
 				{
 					Cam.nSpeed = 50.0;
