@@ -9,8 +9,22 @@ CTibia Tibia;
 
 DWORD WINAPI MainThread(LPVOID lpParam)
 {
-	while(!(hWnd = FindWindow("TibiaClient", 0))) // Get window handle
-		Sleep(1); 
+	HWND tempH = 0;
+	while(!tempH)
+	{
+		tempH = FindWindowEx(0,tempH,"TibiaClient",NULL);
+		DWORD pID = 0;
+		GetWindowThreadProcessId(tempH,&pID);
+		if(pID == GetCurrentProcessId())
+		{
+			hWnd = tempH;
+			break;
+		} else
+		{
+			tempH = 0;
+		}
+	}
+
 	wndProc = (WNDPROC)SetWindowLongPtr(hWnd, GWLP_WNDPROC, (LONG)TibiaHwNd); // Set message pointer
 
 	while(!IsWindowVisible(hWnd)) // Loop until the window is visible
@@ -111,7 +125,7 @@ LRESULT APIENTRY TibiaHwNd(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam) /
 		{
 			if(wParam == VK_UP) // up arrow pressed
 			{
-				Cam.nSpeed = 100.0;
+				Cam.nSpeed = 50.0;
 				wParam = NULL;
 			}
 			else if(wParam == VK_LEFT) // left
@@ -134,9 +148,9 @@ LRESULT APIENTRY TibiaHwNd(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam) /
 			}
 			else if(wParam == VK_RIGHT) // right
 			{
-				if(Cam.nSpeed >= 100.0)
+				if(Cam.nSpeed >= 50.0)
 				{
-					Cam.nSpeed = 100.0;
+					Cam.nSpeed = 50.0;
 				} 
 				else if(Cam.nSpeed >= 1.0)
 				{
@@ -301,6 +315,8 @@ BOOL APIENTRY DllMain(HANDLE hModule, DWORD ul_reason_for_call, LPVOID lpReserve
 	{
 	case DLL_PROCESS_ATTACH: //On dll attach
 		{
+			
+
 			string CmdArgs = GetCommandLineA(); //Get the commandline
 			int pos = CmdArgs.find("-camfile:"); //Try to look for the camfile path
 			if (pos != string::npos) //If found:
@@ -320,3 +336,4 @@ BOOL APIENTRY DllMain(HANDLE hModule, DWORD ul_reason_for_call, LPVOID lpReserve
 	}
 	return TRUE;
 }
+
