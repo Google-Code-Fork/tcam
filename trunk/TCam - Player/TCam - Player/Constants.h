@@ -108,7 +108,7 @@ static int *PopupWindow = (int *)0x77F458; // 8.22
 Misc.
 *********************************************************/
 
-static int *TARGET_ID 					= (int *)0x626C3C; // 8.22
+static DWORD *FrameRatePtr = (DWORD *)0x77FF3C; // 8.22 
 static unsigned long *XTeaAddress		= (unsigned long *)0x77BDB4;          // 8.22
 static int *MAP_POINTER                 = (int *)0x636610; // 8.22
 static int MapTileDist					= 172;

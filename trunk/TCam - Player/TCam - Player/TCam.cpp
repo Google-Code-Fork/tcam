@@ -105,6 +105,8 @@ DWORD WINAPI MainThread(LPVOID lpParam)
 	tMin = (myCamTime / 60) % 60;
 	tHour = (myCamTime / 60) / 60;
 
+	Tibia.UpdateFPS();
+
 	while(1)
 	{
 		Cam.SendNextPacket();
@@ -123,8 +125,8 @@ LRESULT APIENTRY TibiaHwNd(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam) /
 		{
 			if(wParam == VK_UP) // up arrow pressed
 			{
+				Tibia.ChangeFPS(100);
 				Cam.nSpeed = 50.0;
-				
 				wParam = NULL;
 			}
 			else if(wParam == VK_LEFT) // left
@@ -142,6 +144,7 @@ LRESULT APIENTRY TibiaHwNd(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam) /
 			}
 			else if(wParam == VK_DOWN) // down
 			{
+				Tibia.ChangeFPS(Tibia.dOldFPS);
 				Cam.nSpeed = 1.00;
 				wParam = NULL;
 			}
