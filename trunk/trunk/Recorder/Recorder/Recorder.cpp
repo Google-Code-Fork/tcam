@@ -4,10 +4,10 @@
 #define IDC_LIST			1001
 #define IDC_ACCEPT			1002
 #define IDC_REFRESH			1003
-#define PLAYER_ID			0x00624C70
-#define BATTLELIST_BEGIN	0x00624CD0
-#define BATTLELIST_END		0x0062AA90
-#define ISONLINE			0x0077D3F8
+#define PLAYER_ID			0x00626C70
+#define BATTLELIST_BEGIN	0x00626CD0
+#define BATTLELIST_END		0x0062CA24
+#define ISONLINE			0x0077F3F8
 
 #include "Recorder.h"
 #include "resource.h"
