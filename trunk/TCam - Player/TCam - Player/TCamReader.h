@@ -21,7 +21,7 @@ public:
 
 	int nTotalPlayTime;
 	int nCurrentPlayTime;
-	int nLeftOverTime;
+	int nPlayUntil;
 
 	double nSpeed;
 
@@ -35,7 +35,7 @@ private:
 	long fileSize;
 	
 	char *data;
-	int nPlayUntil;
+	
 	
 };
 

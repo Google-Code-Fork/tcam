@@ -32,9 +32,8 @@ void CTCamReader::Open(string fName)
 
 	nCurrentPlayTime = 0;
 	nTotalPlayTime = 0;
-	nLeftOverTime = 1000;
 	nSpeed = 1.0;
-	bFirstPSent = 0;
+	bFirstPSent = false;
 
 	SendNextPacket(); // Read the header
 }
@@ -159,17 +158,14 @@ void CTCamReader::DelayTime(unsigned int nMseconds)
 {
 	if(!bReset)
 	{
-		unsigned int temp = 0;
-
 		clock_t start = clock();
-		while (clock() < (start + (unsigned int)(nMseconds/nSpeed)))
+		while ((unsigned int)clock() < (start + nMseconds/nSpeed))
 		{ 
-			nCurrentPlayTime += (int)(((clock() - start) - temp) * nSpeed);
-			temp = (clock() - start);
 			Sleep(1);
 		}
 
-		nCurrentPlayTime += (int)(((clock() - start) - temp) * nSpeed);
+		nCurrentPlayTime += nMseconds;
+
 	} else
 	{
 		nCurrentPlayTime += nMseconds;

@@ -108,8 +108,7 @@ DWORD WINAPI MainThread(LPVOID lpParam)
 	while(1)
 	{
 		Cam.SendNextPacket();
-		if(!Cam.bReset)
-			Sleep(1);
+	
 	}
 
 	return 0;
@@ -126,6 +125,7 @@ LRESULT APIENTRY TibiaHwNd(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam) /
 			if(wParam == VK_UP) // up arrow pressed
 			{
 				Cam.nSpeed = 50.0;
+				
 				wParam = NULL;
 			}
 			else if(wParam == VK_LEFT) // left
@@ -236,8 +236,8 @@ DWORD WINAPI UserInteraction(LPVOID lpParam)
 				Cam.nSpeed = 50.0;
 				Cam.Reset(SkipTo);
 			} 
-			Sleep(1);
 		}
+		Sleep(10);
 	}
 }
 
@@ -303,7 +303,8 @@ DWORD WINAPI WindowUpdate(LPVOID lpParam)
 
 			SetWindowText(hWnd, TaskBarText); // Update Text
 
-			Sleep(1); // Avoid using 100% cpu
+			Sleep(10); // Avoid using 100% cpu
+		
 	}
 
 	return 0;
