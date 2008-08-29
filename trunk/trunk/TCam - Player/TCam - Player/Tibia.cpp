@@ -2,6 +2,7 @@
 
 CTibia::CTibia()
 {
+	dOldFPS = 0;
 }
 
 CTibia::~CTibia()
@@ -46,4 +47,16 @@ char *CTibia::CreateCharList()
 	EncryptPacket(cPacket); // Encrypt it
 
 	return (char *)cPacket;
+}
+
+void CTibia::ChangeFPS(double dFPS)
+{
+	double *FrameRateLimit = (double *)(*FrameRatePtr + 0x58); 
+	*FrameRateLimit = (dFPS); // set to 10
+}
+
+void CTibia::UpdateFPS()
+{
+	double *FrameRateLimit = (double *)(*FrameRatePtr + 0x58); 
+	dOldFPS = *FrameRateLimit;
 }
