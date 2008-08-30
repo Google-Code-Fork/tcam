@@ -23,6 +23,8 @@ Return:
 *************************************************************************************************/
 void CPacket::PhrasePacket(unsigned char *cBuffer, int nSize)
 {
+	if(*PLAYER_CONNECTION >=6)
+	{
 	unsigned char *cMyBuf = (unsigned char *)malloc(10); // Allocate memory to hold unenecrypted packet
 	memcpy(&cMyBuf[0],&cBuffer[0],10);
 
@@ -40,6 +42,7 @@ void CPacket::PhrasePacket(unsigned char *cBuffer, int nSize)
 	
 
 	free(cMyBuf);
+	}
 }
 
 /*************************************************************************************************

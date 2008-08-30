@@ -96,9 +96,12 @@ void CFileHandler::WriteDelay()
 	startClock = clock();
 	totalTime += delayTime;
 
-	Write(DELAY_ID,1);
-	Write(4,2);
-	Write(delayTime,4);
+	if(*PLAYER_CONNECTION == 8)
+	{
+		Write(DELAY_ID,1);
+		Write(4,2);
+		Write(delayTime,4);
+	}
 }
 
 /*************************************************************************************************
