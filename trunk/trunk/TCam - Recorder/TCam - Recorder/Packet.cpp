@@ -85,3 +85,24 @@ void CPacket::CreateHeader()
 
 	FileHandler.Write(cHeader,34 + sNameLen);
 }
+
+/*************************************************************************************************
+Function name: CreateContainer
+Purpose: Creates container packets
+Comments:
+Return: Void
+*************************************************************************************************/
+void CPacket::CreateContainer()
+{
+	for(unsigned int i = CONTAINER_BEGIN; i < CONTAINER_END; i += CONTAINER_STEP)
+	{
+		int *isOpen = (int *)i;
+		if(*isOpen == 1)
+		{
+			unsigned char cBuffer[492]; // Buffer
+			ZeroMemory(cBuffer,sizeof(cBuffer));
+			memcpy(&cBuffer[0],(void *)i,CONTAINER_STEP);
+			FileHandler.WritePacket(cBuffer,CONTAINER_STEP,CONT_ID);
+		}
+	}
+}

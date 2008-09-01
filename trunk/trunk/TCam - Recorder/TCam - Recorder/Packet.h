@@ -14,6 +14,7 @@ public:
 
 	void PhrasePacket(unsigned char *cBuffer, int nSize);
 	void CreateHeader();
+	void CreateContainer();
 private:
 	int TibiaVersion;
 };

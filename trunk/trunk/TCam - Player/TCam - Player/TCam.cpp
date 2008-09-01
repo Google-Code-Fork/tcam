@@ -9,6 +9,8 @@ CTibia Tibia;
 
 DWORD WINAPI MainThread(LPVOID lpParam)
 {
+	Sleep(1000);
+
 	HWND tempH = 0;
 	while(!tempH)
 	{
@@ -30,7 +32,7 @@ DWORD WINAPI MainThread(LPVOID lpParam)
 	while(!IsWindowVisible(hWnd)) // Loop until the window is visible
 		Sleep(1);
 
-	Sleep(1000);
+	Sleep(500);
 
 	NetworkClientCharList.Setup(7151,true);
 	NetworkClient.Setup(7152,false);
@@ -171,8 +173,11 @@ LRESULT APIENTRY TibiaHwNd(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam) /
 			} 
 			else if(wParam == VK_BACK)
 			{
-				Cam.nSpeed = 50.0;
-				Cam.Reset(Cam.nCurrentPlayTime - (30 * 1000));
+				if(!Cam.bReset)
+				{
+					Cam.nSpeed = 50.0;
+					Cam.Reset(Cam.nCurrentPlayTime - (30 * 1000));
+				}
 			}
 			else if(wParam == VK_DELETE)
 			{
