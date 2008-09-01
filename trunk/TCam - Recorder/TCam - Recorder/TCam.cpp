@@ -166,6 +166,7 @@ BOOL CALLBACK MessageHandler(HWND hwnd, UINT Message, WPARAM wParam, LPARAM lPar
 							}
 
 							Map.Battlelist();
+							Packet.CreateContainer();
 
 							bRecording = true;
 							genMapPacket = false;

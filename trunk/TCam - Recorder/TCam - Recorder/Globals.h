@@ -19,6 +19,7 @@ enum Protocol
 	BLIST_ID = 0x31,
 	DELAY_ID = 0x32,
 	HEADER_ID = 0x33,
+	CONT_ID = 0x34,
 	PACKET_ID = 0x40
 };
 

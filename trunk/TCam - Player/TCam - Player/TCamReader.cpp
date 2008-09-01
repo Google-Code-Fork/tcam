@@ -27,8 +27,10 @@ void CTCamReader::Open(string fName)
 
 	byteOffset = 0;
 
-	Nop(0x42330D,2);
-	Nop(0x42333C,2);
+	Nop(0x42330D,2); // Acc/Pass warning
+	Nop(0x42333C,2); // Acc/Pass warning
+	Nop(0x412AC2,5); // New Channel window
+	Nop(0x413F46,5); // Outfit window
 
 	nCurrentPlayTime = 0;
 	nTotalPlayTime = 0;
@@ -149,9 +151,9 @@ void CTCamReader::Reset(int time)
 void CTCamReader::Nop(DWORD dwAddress, int size)
 {
 	DWORD dwOldProtect, dwNewProtect;
-	VirtualProtectEx(GetCurrentProcess(), (LPVOID)(0x42330D), size, PAGE_READWRITE, &dwOldProtect);
+	VirtualProtectEx(GetCurrentProcess(), (LPVOID)(dwAddress), size, PAGE_READWRITE, &dwOldProtect);
 	memset((LPVOID)(dwAddress), 0x90, size);
-	VirtualProtectEx(GetCurrentProcess(), (LPVOID)(0x42330D), size, dwOldProtect, &dwNewProtect);
+	VirtualProtectEx(GetCurrentProcess(), (LPVOID)(dwAddress), size, dwOldProtect, &dwNewProtect);
 }
 
 void CTCamReader::DelayTime(unsigned int nMseconds)
