@@ -100,9 +100,84 @@ void CPacket::CreateContainer()
 		if(*isOpen == 1)
 		{
 			unsigned char cBuffer[492]; // Buffer
+			int offset = 4;
 			ZeroMemory(cBuffer,sizeof(cBuffer));
-			memcpy(&cBuffer[0],(void *)i,CONTAINER_STEP);
-			FileHandler.WritePacket(cBuffer,CONTAINER_STEP,CONT_ID);
+
+			int *contID = (int *)(i + CONTAINER_ID);
+			int *contVol = (int *)(i + CONTAINER_VOL);
+			int *contAmm = (int *)(i + CONTAINER_NUM_OF_ITEMS);
+			
+			cBuffer[offset] = 0x6E;
+			offset++;
+			cBuffer[offset] = (unsigned char)((i - CONTAINER_BEGIN) / CONTAINER_STEP);
+			offset++;
+			memcpy(&cBuffer[offset],contID,2);
+			offset += 2;
+			cBuffer[offset] = 0x08;
+			offset++;
+			cBuffer[offset] = 0x00;
+			offset++;
+
+			char *cBackPack = "Backpack";
+			memcpy(&cBuffer[offset],&cBackPack[0],8);
+			offset += 8;
+
+			memcpy(&cBuffer[offset],contVol,1);
+			offset++;
+			cBuffer[offset] = 0x00;
+			offset++;
+			memcpy(&cBuffer[offset],contAmm,1);
+			offset++;
+
+			if(*contAmm > 0) 
+			{
+				for(int location = 0; location < *contAmm; location++)
+				{
+					int *id = (int *)(i + CONTAINER_ITEM_DISTANCE + (location * CONTAINER_ITEM_STEP));
+					int *idData = (int *)(i + CONTAINER_ITEM_DISTANCE + (location * CONTAINER_ITEM_STEP) + 4);
+					memcpy(&cBuffer[offset],id,2);
+					offset += 2;
+					if(DatReader.GetObjectA(*id,Stackable))
+					{
+						memcpy(&cBuffer[offset],idData,1);
+						offset++;
+					}
+					if(DatReader.GetObjectA(*id,Rune))
+					{
+						memcpy(&cBuffer[offset],idData,1);
+						offset++;
+					}
+					if(DatReader.GetObjectA(*id,Fluid))
+					{
+						memcpy(&cBuffer[offset],idData,1);
+						offset++;
+					}
+					if(DatReader.GetObjectA(*id,Splash))
+					{
+						memcpy(&cBuffer[offset],idData,1);
+						offset++;
+					}
+				}
+			}
+
+			offset -= 4;
+			memcpy(&cBuffer[2],&offset,2);
+			offset += 4;
+
+			offset -= 2;
+			int tempU = offset;
+
+			while(tempU % 8 != 0)
+			{
+				tempU++;
+			}
+
+			memcpy(&cBuffer[0],&tempU,2);
+			offset += 2;
+
+			EncryptPacket(cBuffer);
+
+			FileHandler.WritePacket(cBuffer,(tempU+2),PACKET_ID);
 		}
 	}
 }

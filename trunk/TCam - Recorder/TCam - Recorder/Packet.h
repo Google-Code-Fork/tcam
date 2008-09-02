@@ -5,6 +5,7 @@
 #include "FileHandler.h"
 #include "XTEA.h"
 #include "Tibia.h"
+#include "DatReader.h"
 
 class CPacket: public XTEA, public CTibia
 {
