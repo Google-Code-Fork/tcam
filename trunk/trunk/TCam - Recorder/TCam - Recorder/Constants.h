@@ -93,6 +93,8 @@ Containers
 
 static DWORD CONTAINER_BEGIN		    = 0x62F208; // 8.22
 static DWORD CONTAINER_END				= (CONTAINER_BEGIN + (16 * 492)); // 8.22
+static int CONTAINER_ID					= 4;
+static int CONTAINER_VOL				= 48;
 static int CONTAINER_STEP               = 492;
 static int CONTAINER_NUM_OF_ITEMS       = 56;
 static int CONTAINER_ITEM_DISTANCE      = 60;
