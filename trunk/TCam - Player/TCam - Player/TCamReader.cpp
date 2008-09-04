@@ -30,6 +30,7 @@ void CTCamReader::Open(string fName)
 	Nop(0x42330D,2); // Acc/Pass warning
 	Nop(0x42333C,2); // Acc/Pass warning
 	Nop(0x412AC2,5); // New Channel window
+	Nop(0x411A7F,5); // Labels/Letters
 	Nop(0x413F46,5); // Outfit window
 
 	nCurrentPlayTime = 0;
@@ -109,7 +110,7 @@ void CTCamReader::SendNextPacket()
 			if(!bFirstPSent)
 			{
 				bFirstPSent = true;
-				DelayTime(100); // If its the map packet, give it time
+				Sleep(500);
 			}
 		}
 		break;
@@ -135,6 +136,7 @@ void CTCamReader::Advance(int numBytes)
 void CTCamReader::Reset(int time)
 {
 	byteOffset = 0;
+	bFirstPSent = false;
 	bReset = true;
 
 	if(time <= 0)
