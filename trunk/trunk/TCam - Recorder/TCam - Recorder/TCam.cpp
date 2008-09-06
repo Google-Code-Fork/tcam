@@ -130,6 +130,7 @@ BOOL CALLBACK MessageHandler(HWND hwnd, UINT Message, WPARAM wParam, LPARAM lPar
 				{
 					bRecording = false;
 					FileHandler.Export();
+					FileHandler.Compress();
 					SetWindowText(GetDlgItem(MainDialog,IDC_RECORD),"Record");
 					Tibia.SetText("TCam 1.0");
 					fileNameSet = false;

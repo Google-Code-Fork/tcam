@@ -1,4 +1,9 @@
 #include "TCamReader.h"
+#include "gzip.h"
+
+#pragma comment(lib, "zlib.lib")
+using namespace zlib;
+CGZip GZip;
 
 CTCamReader::CTCamReader()
 {
@@ -13,17 +18,31 @@ CTCamReader::~CTCamReader()
 void CTCamReader::Open(string fName)
 {
 	nTotalPlayTime = 0;
+	char cTempSize[5];
+	ZeroMemory(&cTempSize[0],sizeof(cTempSize));
 	myRecording.open(fName.c_str(),ios::in | ios::binary | ios::ate);
-	fileSize = myRecording.tellg();
-	myRecording.seekg(0, ios::beg);
-
+	myRecording.seekg(0,ios::end);
+	int iTemp = myRecording.tellg();
+	myRecording.seekg(iTemp-4,ios::beg);
+	myRecording.read(&cTempSize[0],4);
+	memcpy(&fileSize,&cTempSize[0],4);
+	
 	data = (char*) malloc(sizeof(char)*fileSize);
+	myRecording.close();
+
 	if(data == NULL)
 	{
 		MessageBoxA(MainDialog,"Insufficient memory or FileName not selected!","Info",MB_OK);
 	}
-	myRecording.read(data,fileSize);
-	myRecording.close();
+
+	if (!GZip.Open(fName.c_str(), CGZip::ArchiveModeRead))
+	{
+		MessageBoxA(0,"Could not open file for compression","Error",MB_OK);
+	} else
+	{
+		GZip.ReadBufferSize((CZipper::voidp *)data,fileSize);
+		GZip.Close();
+	}
 
 	byteOffset = 0;
 

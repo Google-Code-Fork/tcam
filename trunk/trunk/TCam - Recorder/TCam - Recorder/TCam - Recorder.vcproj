@@ -88,7 +88,7 @@
 			IntermediateDirectory="$(ConfigurationName)"
 			ConfigurationType="2"
 			CharacterSet="2"
-			WholeProgramOptimization="1"
+			WholeProgramOptimization="0"
 			>
 			<Tool
 				Name="VCPreBuildEventTool"
@@ -210,6 +210,10 @@
 			</File>
 			<File
 				RelativePath=".\Globals.h"
+				>
+			</File>
+			<File
+				RelativePath=".\gzip.h"
 				>
 			</File>
 			<File

@@ -4,6 +4,7 @@
 #include "Globals.h"
 #include "Constants.h"
 
+
 class CFileHandler
 {
 public:
@@ -15,6 +16,7 @@ public:
 	void WriteDelay();
 	void WritePacket(unsigned char *cBuffer, unsigned int nSize, unsigned int nPacketID);
 	void Export();
+	void Compress();
 	
 	long nOffset; // Current offset in the data pointer
 	unsigned char *cData; // Stores the packets as they arrive
