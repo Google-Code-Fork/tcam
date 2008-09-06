@@ -1,4 +1,10 @@
 #include "FileHandler.h"
+#include "gzip.h"
+
+#pragma comment(lib, "zlib.lib")
+using namespace zlib;
+CGZip GZip;
+
 
 /************************************************************************************************* 
 Constructor
@@ -144,4 +150,40 @@ void CFileHandler::Export()
 	bStreamBusy = false;
 
 	free(cTemp);
+}
+
+void CFileHandler::Compress()
+{
+	ifstream readStream;
+	readStream.open(fileName, ios::in | ios::binary | ios::ate);
+	readStream.seekg(0,ios_base::end);
+	int length = readStream.tellg();
+	unsigned char *cTemp = (unsigned char *)malloc(length);
+	readStream.seekg(0,ios_base::beg);
+	readStream.read((char *)cTemp,length);
+	readStream.close();
+
+	readStream.open(fileName, ios::trunc); // Clear the file contents
+	readStream.close();
+
+	if (!GZip.Open(fileName,CGZip::ArchiveModeWrite))
+	{
+		MessageBoxA(0,"Could not open file for compression","Error",MB_OK);
+	} else
+	{
+		if(!GZip.WriteBuffer(cTemp,length))
+		{
+			MessageBoxA(0,"Could not write file for compression","Error",MB_OK);
+		}
+
+		GZip.Close();
+	}
+
+	char cLength[5];
+	ZeroMemory(&cLength[0],sizeof(cLength));
+	memcpy(&cLength[0],&length,sizeof(int));
+
+	myRecording.open(fileName, ios::out | ios::binary | ios::app);
+	myRecording.write((const char *)cLength,4);
+	myRecording.close();
 }
