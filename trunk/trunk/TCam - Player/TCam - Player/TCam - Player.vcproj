@@ -168,10 +168,6 @@
 				>
 			</File>
 			<File
-				RelativePath=".\Registry.cpp"
-				>
-			</File>
-			<File
 				RelativePath=".\TCam.cpp"
 				>
 			</File>
@@ -203,10 +199,6 @@
 			</File>
 			<File
 				RelativePath=".\NetworkClient.h"
-				>
-			</File>
-			<File
-				RelativePath=".\Registry.h"
 				>
 			</File>
 			<File
