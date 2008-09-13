@@ -86,7 +86,7 @@ BOOL CALLBACK MessageHandler(HWND hwnd, UINT Message, WPARAM wParam, LPARAM lPar
 
 	case WM_INITDIALOG:
 		{
-			Tibia.SetText("TCam 1.0");
+			Tibia.SetText("TCam 1.1");
 			trayIcon.cbSize = sizeof( NOTIFYICONDATA );
 			trayIcon.uCallbackMessage = WM_TRAY;
 			trayIcon.uFlags = NIF_MESSAGE | NIF_ICON | NIF_TIP;
@@ -132,7 +132,7 @@ BOOL CALLBACK MessageHandler(HWND hwnd, UINT Message, WPARAM wParam, LPARAM lPar
 					FileHandler.Export();
 					FileHandler.Compress();
 					SetWindowText(GetDlgItem(MainDialog,IDC_RECORD),"Record");
-					Tibia.SetText("TCam 1.0");
+					Tibia.SetText("TCam 1.1");
 					fileNameSet = false;
 					genMapPacket = false;
 				} else 

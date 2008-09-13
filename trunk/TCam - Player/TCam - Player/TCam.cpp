@@ -3,7 +3,6 @@
 
 CNetworkClient NetworkClientCharList; // Used to establish connection with Login Server
 CNetworkClient NetworkClient; // Used as Game Server emulator
-CRegistry Registry;
 CTCamReader Cam;
 CTibia Tibia;
 
@@ -92,13 +91,6 @@ DWORD WINAPI MainThread(LPVOID lpParam)
 		if(NetworkClient.StartListenClient()) // Lisen for game connection
 			break; // Established connection to Proxy
 	}
-
-	if(strcmp(camFullPath, "") == 0)
-	{
-		DWORD Len = 260; 
-		Registry.QueryStringValue(HKEY_LOCAL_MACHINE,"Software\\TibiaFreak\\TCam", "CamPlaying",camFullPath,Len); // Get cam full-path
-	}
-
 	// Start reading file and playing cam
 	Cam.Open(camFullPath);
 

@@ -55,7 +55,7 @@ END
 IDD_MAIN DIALOGEX 0, 0, 130, 51
 STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | DS_CENTER | WS_POPUP | WS_CAPTION | WS_SYSMENU
 EXSTYLE WS_EX_PALETTEWINDOW
-CAPTION "TCam - 1.0 -Recorder"
+CAPTION "TCam - 1.1 -Recorder"
 MENU IDR_MENU1
 FONT 8, "MS Shell Dlg", 400, 0, 0x1
 BEGIN
@@ -69,7 +69,7 @@ EXSTYLE WS_EX_TOOLWINDOW
 CAPTION "Credits"
 FONT 8, "MS Shell Dlg", 400, 0, 0x1
 BEGIN
-    LTEXT           "TCam 1.0",IDC_STATIC,74,10,59,13
+    LTEXT           "TCam 1.1",IDC_STATIC,74,10,59,13
     LTEXT           "[Project Leader] - Oblivion (Jeremic)",IDC_STATIC,17,22,118,11
     LTEXT           "[Developer]        - OsQu",IDC_STATIC,17,32,118,11
     LTEXT           "Many thanks to Stiju for providing Injector source and general help http://www.tpforums.org/forum/member.php?u=6",IDC_STATIC,12,50,165,34
